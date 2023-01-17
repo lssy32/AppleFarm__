@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.applefarm_.user.entitiy.UserRoleEnum.CUSTOMER;
+import static com.example.applefarm_.user.entitiy.UserRoleEnum.SELLER;
+
 @Service
 @RequiredArgsConstructor
 @Transactional

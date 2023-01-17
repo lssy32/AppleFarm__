@@ -12,7 +12,7 @@ public class UserProfileResponseDto {
     private String image;
 
     public UserProfileResponseDto(User user) {
-        this.nickname = user.getNickname();
+        this.nickname = user.getNickName();
         this.image = user.getImage();
     }
 }

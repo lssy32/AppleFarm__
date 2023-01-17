@@ -1,38 +1,22 @@
 package com.example.applefarm_.user.service;
 
 
-import com.example.applefarm_.security.user.UserDetailsImpl;
-import com.example.applefarm_.seller.entitiy.SellerProfile;
-import com.example.applefarm_.seller.repository.SellerRepository;
-import com.example.applefarm_.user.dto.UserOrderDto;
-import com.example.applefarm_.user.dto.SellerRegistrationDto;
-import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
 import com.example.applefarm_.security.jwt.JwtUtil;
+import com.example.applefarm_.seller.repository.SellerRepository;
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import com.example.applefarm_.user.dto.UserProfileResponseDto;
-import com.example.applefarm_.user.entitiy.Seller;
 import com.example.applefarm_.user.entitiy.User;
 import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import com.example.applefarm_.user.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,6 @@
 package com.example.applefarm_.user.entitiy;
 
 import lombok.Getter;
-//import com.example.applefarm_.security.config.Timestamp;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import lombok.NoArgsConstructor;
 
@@ -46,7 +45,7 @@ public class User {
 
 
     public void update(UserProfileRequestDto userProfileRequestDto) {
-        this.nickname = userProfileRequestDto.getNickname();
+        this.nickName = userProfileRequestDto.getNickname();
         this.image = userProfileRequestDto.getImage();
     }
 }
