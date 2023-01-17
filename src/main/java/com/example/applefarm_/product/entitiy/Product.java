@@ -12,6 +12,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
+    // userId -> FK
     @Column(nullable = false, name = "product_name")
     private String productName;
     @Column(nullable = false, name = "product_price")
