@@ -6,15 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
+@Builder
 public class ProductResponse {
 
     private Long productId;
@@ -40,22 +37,22 @@ public class ProductResponse {
         return new ProductResponse(product);
     }
 
-    public static List<ProductResponse> of(List<Product> products){
+    public static List<ProductResponse> of(List<Product> products) {
         return products.stream().map(ProductResponse::of).collect(Collectors.toList());
     }
 
-//    public static Page<ProductResponse> toDtoPage(Page<Product> productsPage) {
-//        Page<ProductResponse> postResponseDtoPage = productsPage.map(m ->
-//                ProductResponse.builder()
-//                        .id(m.getId())
-//                        .productName(m.getProductName())
-//                        .productPrice(m.getProductPrice())
-//                        .quantity(m.getProductQuantity())
-//                        .productImage(m.getProductImage())
-//                        .productDetail(m.getProductDetail())
-//                        .productCategory(m.getProductCategory())
-//                        .build());
-//        return postResponseDtoPage;
+    public static Page <ProductResponse> toDtoPage(Page<Product> productsPage) {
+        Page<ProductResponse> postResponseDtoPage = productsPage.map(m ->
+                ProductResponse.builder()
+                        .id(m.getId())
+                        .productName(m.getProductName())
+                        .productPrice(m.getProductPrice())
+                        .quantity(m.getProductQuantity())
+                        .productImage(m.getProductImage())
+                        .productDetail(m.getProductDetail())
+                        .productCategory(m.getProductCategory())
+                        .build());
+        return postResponseDtoPage;
 
     }
 
