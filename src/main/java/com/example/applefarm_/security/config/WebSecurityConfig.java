@@ -40,7 +40,7 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests()
             .antMatchers("/h2-console/**").permitAll()
-            .antMatchers("/api/users/**").정()
+            .antMatchers("/api/users/**").permitAll()
             .anyRequest().authenticated()
             .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class); // JWT 인증/인가를 사용하기 위한 설정
 
