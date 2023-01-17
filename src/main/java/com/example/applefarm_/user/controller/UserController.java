@@ -2,6 +2,8 @@ package com.example.applefarm_.user.controller;
 
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
+import com.example.applefarm_.user.dto.UserProfileRequestDto;
+import com.example.applefarm_.user.dto.UserProfileResponseDto;
 import com.example.applefarm_.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

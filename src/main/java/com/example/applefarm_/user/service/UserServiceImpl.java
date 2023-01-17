@@ -4,6 +4,9 @@ package com.example.applefarm_.user.service;
 import com.example.applefarm_.security.jwt.JwtUtil;
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
+import com.example.applefarm_.user.dto.UserProfileRequestDto;
+import com.example.applefarm_.user.dto.UserProfileResponseDto;
+import com.example.applefarm_.user.entitiy.Seller;
 import com.example.applefarm_.user.entitiy.User;
 import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import com.example.applefarm_.user.repository.UserRepository;
@@ -17,10 +20,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final SellerRepository sellerRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
