@@ -1,9 +1,14 @@
 package com.example.applefarm_.product.controller;
 
 import com.example.applefarm_.product.dto.ProductRequest;
+import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.service.ProductService;
 import com.example.applefarm_.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,21 +24,22 @@ public class ProductController {
 
     //판매상품 등록
     @PostMapping("")
-    public ResponseEntity saveProduct(ProductRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity saveProduct(@RequestBody ProductRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails){
         productService.saveProduct(request,userDetails.getUser());
         return ResponseEntity.ok("판매상품 등록 완료");
     }
 
+
     //판매상품 조회 Todo 페이징처리
-    @GetMapping("")
-    public ResponseEntity getProductList(){
-        productService.getProductList();
-        return ResponseEntity.ok(" 판매상품 조회 완료");
-    }
+//    @GetMapping("")
+//    public Page<Product> getProductList(@PageableDefault(size = 3, sort ="id",direction = Sort.Direction.DESC)Pageable pageable){
+//        return productService.getProductList(pageable);
+//
+//    }
     //판매상품 수정
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        productService.updateProduct(id,userDetails.getUser());
+    public ResponseEntity updateProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody ProductRequest request){
+        productService.updateProduct(id,userDetails.getUser(),request);
         return ResponseEntity.ok("판매상품 수정 완료");
     }
 

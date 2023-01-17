@@ -1,12 +1,15 @@
 package com.example.applefarm_.product.dto;
 
 import com.example.applefarm_.product.entitiy.Product;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,4 +43,21 @@ public class ProductResponse {
     public static List<ProductResponse> of(List<Product> products){
         return products.stream().map(ProductResponse::of).collect(Collectors.toList());
     }
-}
+
+//    public static Page<ProductResponse> toDtoPage(Page<Product> productsPage) {
+//        Page<ProductResponse> postResponseDtoPage = productsPage.map(m ->
+//                ProductResponse.builder()
+//                        .id(m.getId())
+//                        .productName(m.getProductName())
+//                        .productPrice(m.getProductPrice())
+//                        .quantity(m.getProductQuantity())
+//                        .productImage(m.getProductImage())
+//                        .productDetail(m.getProductDetail())
+//                        .productCategory(m.getProductCategory())
+//                        .build());
+//        return postResponseDtoPage;
+
+    }
+
+
+

@@ -1,6 +1,7 @@
 package com.example.applefarm_.product.entitiy;
 
 import com.example.applefarm_.product.dto.ProductRequest;
+import com.example.applefarm_.security.config.Timestamp;
 import com.example.applefarm_.user.entitiy.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +14,12 @@ import javax.persistence.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") //판매자 ID (FK)
-    private User user;
+   // @ManyToOne(fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "user_id") //판매자 ID (FK)
+    @Column
+     private Long userId;
 
 
     @Column(nullable = false, name = "product_name")
@@ -46,5 +48,14 @@ public class Product {
         this.productDetail = request.getProductDetail();
         this.productCategory= request.getProductCategory();
 
+    }
+
+    public void updateProduct(ProductRequest request) {
+        this.productName = request.getProductName();
+        this.productPrice = request.getProductPrice();
+        this.productQuantity = request.getQuantity();
+        this.productImage = request.getProductImage();
+        this.productDetail = request.getProductDetail();
+        this.productCategory= request.getProductCategory();
     }
 }

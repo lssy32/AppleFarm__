@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    List<Product> findAllByOrderByModifiedAtDesc();
+ //   List<Product> findAllByOrderByModifiedAtDesc();
     Optional<Product> findByIdAndUserId(Long id, Long userId);
 
 }

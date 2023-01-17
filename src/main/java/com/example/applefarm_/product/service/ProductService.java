@@ -6,6 +6,8 @@ import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
 import com.example.applefarm_.user.entitiy.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,17 +24,20 @@ public class ProductService {
         Product product = productRepository.save(new Product(request,user));
         return new ProductResponse(product);
     }
-    //Todo 페이징처리
-    @Transactional
-    public List<ProductResponse> getProductList() {
-        return ProductResponse.of(productRepository.findAllByOrderByModifiedAtDesc());
 
-    }
+    //Todo 페이징처리
+//    @Transactional
+//    public Page<ProductResponse> getProductList(Pageable pageable) {
+//        Page<Product> productsPage = productRepository.findAll(pageable);
+//        Page<ProductResponse> productResponseDtoPage = ProductResponse.toDtoPage(productsPage);
+//        return productResponseDtoPage;
+//    }
     @Transactional
-    public void updateProduct(Long id, User user) {
+    public void updateProduct(Long id, User user,ProductRequest productRequest) {
         Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
         );
+        foundProduct.updateProduct(productRequest);
     }
 
     @Transactional
@@ -40,6 +45,7 @@ public class ProductService {
         Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
         );
+        productRepository.deleteById(id);
     }
 
 
