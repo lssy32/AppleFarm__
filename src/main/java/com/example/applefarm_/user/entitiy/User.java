@@ -1,7 +1,7 @@
 package com.example.applefarm_.user.entitiy;
 
 import lombok.Getter;
-import com.example.applefarm_.security.config.Timestamp;
+//import com.example.applefarm_.security.config.Timestamp;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import lombok.NoArgsConstructor;
 
