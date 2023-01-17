@@ -4,10 +4,7 @@ import com.example.applefarm_.admin.service.AdminServiceImpl;
 import com.example.applefarm_.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,11 +25,11 @@ public class AdminController {
     }
 
     @PutMapping("/modifideroleCustomer/{id}")
-    public void modifideroleCustomer(@Validated Long id){
+    public void modifideroleCustomer(@PathVariable Long id){
         adminrService.modifideroleCustomer(id);
     }
     @PutMapping("/modifideroleSeller/{id}")
-    public void modifideroleSeller(@Validated Long id){
+    public void modifideroleSeller(@PathVariable Long id){
         adminrService.modifideroleSeller(id);
     }
 

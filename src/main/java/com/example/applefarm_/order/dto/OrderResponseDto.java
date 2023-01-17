@@ -1,8 +1,7 @@
 package com.example.applefarm_.order.dto;
 
-import com.example.applefarm_.order.entity.Order;
+import com.example.applefarm_.order.entity.Orders;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class OrderResponseDto {
@@ -11,7 +10,7 @@ public class OrderResponseDto {
     private final Long productId;
     private final int quantity;
 
-    public OrderResponseDto(Order order) {
+    public OrderResponseDto(Orders order) {
         this.orderId = order.getId();
         this.customerId = order.getCustomerId();
         this.productId = order.getProductId();

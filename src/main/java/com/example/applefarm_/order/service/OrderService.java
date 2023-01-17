@@ -2,7 +2,7 @@ package com.example.applefarm_.order.service;
 
 import com.example.applefarm_.order.dto.OrderRequestDto;
 import com.example.applefarm_.order.dto.OrderResponseDto;
-import com.example.applefarm_.order.entity.Order;
+import com.example.applefarm_.order.entity.Orders;
 import com.example.applefarm_.order.repository.OrderRepository;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
@@ -28,13 +28,13 @@ public class OrderService {
         Product product = productRepository.findById(orderRequestDto.getProductId()).orElseThrow(
                 () -> new IllegalArgumentException("상품 정보가 존재하지 않습니다.")
         );
-        Order order = new Order(product, customerId, orderRequestDto.getQuantity());
+        Orders order = new Orders(product, customerId, orderRequestDto.getQuantity());
         orderRepository.save(order);
     }
 
     public List<OrderResponseDto> getMyOrders(int pageChoice, User seller) {
         // 완료 처리가 된 애들도 같이 불러와지는 이슈 -> where절 활용해서 0인 애들만 불러오도록 고민해볼 것. -> 해결 될지도?
-        Page<Order> orders= orderRepository.findAllBySellerIdAndIsDeleted(seller.getId(), 0,pageableSetting(pageChoice));
+        Page<Orders> orders= orderRepository.findAllBySellerIdAndIsDeleted(seller.getId(), 0,pageableSetting(pageChoice));
         List<OrderResponseDto> orderResponseDtoList= orders.stream().map(OrderResponseDto::new).collect(Collectors.toList());
         return orderResponseDtoList;
     }
@@ -47,7 +47,7 @@ public class OrderService {
     }
 
     public void orderCompletionProcessing(Long orderId, User user) {
-        Order order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("주문내역이 없습니다."));
+        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new IllegalArgumentException("주문내역이 없습니다."));
         order.validateSellerId(user.getId());
         order.orderCompletionProcessing();
         orderRepository.save(order);

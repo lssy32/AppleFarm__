@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Order {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +25,7 @@ public class Order {
     //논리삭제를 위한 필드
     private int isDeleted;
 
-    public Order(Product product, Long customerId, int quantity) {
+    public Orders(Product product, Long customerId, int quantity) {
         this.sellerId = product.getId();
         this.customerId = customerId;
         this.productId = product.getId();
