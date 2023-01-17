@@ -1,7 +1,7 @@
 package com.example.applefarm_.user.entitiy;
 
-import com.example.applefarm_.security.config.Timestamp;
 import lombok.Getter;
+import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity(name = "users")
 @Getter
 @NoArgsConstructor
-public class User  {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,16 +20,14 @@ public class User  {
 
     @Column(nullable = false)
     private String loginPassword;
+    @Column(nullable = false)
+    private String nickName;
+    @Column(nullable = false)
+    private String image;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
-
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column(nullable = false)
-    private String image;
 
     public User(String loginId, String loginPassword, UserRoleEnum role) {
         this.loginId = loginId;
@@ -37,12 +35,17 @@ public class User  {
         this.role = role;
     }
 
-    public User(Long id, String loginId, String loginPassword, UserRoleEnum role, String nickname, String image) {
-        this.id = id;
-        this.loginId = loginId;
-        this.loginPassword = loginPassword;
-        this.role = role;
-        this.nickname = nickname;
-        this.image = image;
+    public void changeSellerByCustomer(){  // 커스터머 > 셀러
+        this.role = UserRoleEnum.SELLER;
+    }
+    public void changeCustomerBySeller(){ // 셀러 > 커스터머
+        this.role = UserRoleEnum.CUSTOMER;
+    }
+
+
+
+    public void update(UserProfileRequestDto userProfileRequestDto) {
+        this.nickName = userProfileRequestDto.getNickname();
+        this.image = userProfileRequestDto.getImage();
     }
 }

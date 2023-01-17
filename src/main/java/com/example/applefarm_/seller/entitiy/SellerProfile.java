@@ -5,11 +5,12 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 @Getter
 @Entity
 @NoArgsConstructor
 public class SellerProfile {
-    @Id
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column(nullable = false, name = "seller_nickname", unique = true)

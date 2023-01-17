@@ -1,6 +1,9 @@
-package com.example.applefarm_.customer.dto;
+package com.example.applefarm_.registration.dto;
 
-public class SellerRegistrationDto {
+import lombok.Getter;
+
+@Getter
+public class RegistrationRequestDto {
     private String sellerNickname;
     private String sellerImage;
     private String sellerDetail;
