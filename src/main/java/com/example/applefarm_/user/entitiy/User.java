@@ -34,9 +34,11 @@ public class User extends Timestamp {
     private String sellerDetails;
     private String sellerCategory;
 
-    public User(String loginId, String loginPassword, UserRoleEnum role) {
+    public User(String loginId, String loginPassword, String nickName, String image, UserRoleEnum role) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
+        this.nickName = nickName;
+        this.image = image;
         this.role = role;
     }
 
