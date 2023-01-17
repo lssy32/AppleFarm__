@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.entitiy;
 
+import com.example.applefarm_.security.config.Timestamp;
 import lombok.Getter;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Entity(name = "users")
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends Timestamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,10 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+    private String sellerNickname;
+    private String sellerImage;
+    private String sellerDetails;
+    private String sellerCategory;
 
     public User(String loginId, String loginPassword, UserRoleEnum role) {
         this.loginId = loginId;
