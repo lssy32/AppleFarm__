@@ -1,8 +1,12 @@
 package com.example.applefarm_.user.service;
 
 
+import com.example.applefarm_.product.dto.ProductResponse;
+import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
 import com.example.applefarm_.security.jwt.JwtUtil;
+import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
+import com.example.applefarm_.seller.entitiy.SellerProfile;
 import com.example.applefarm_.seller.repository.SellerRepository;
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
@@ -12,11 +16,19 @@ import com.example.applefarm_.user.entitiy.User;
 import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import com.example.applefarm_.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.relation.Role;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,30 +72,30 @@ public class UserServiceImpl implements UserService {
     }
 
 
-//    @Override
-//    public ResponseEntity getProductList(int page, int size){
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<Product> products = productRepository.findAll(pageable);
-//        List<ProductReponseDto> productReponseDtoList = products.stream().map(product -> new ProductReponseDto(product)).collect(Collectors.toList());
-//        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
-//    }
-//
+    @Override
+    public ResponseEntity getProductList(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageable);
+        List<ProductResponse> productReponseDtoList = products.stream().map(product -> new ProductResponse(product)).collect(Collectors.toList());
+        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
+    }
+
 //    @Override
 //    public ResponseEntity getSellerList(int page, int size){
 //        Pageable pageable = PageRequest.of(page, size);
-//        Page<SellerProfile> sellers = sellerRepository.findAll(pageable);
-//        List<SellerNicknameResponseDto> productReponseDtoList = sellers.stream().map(seller -> new SellerNicknameResponseDto(seller)).collect(Collectors.toList());
+//        Page<SellerProfile> sellerProfiles = sellerRepository.findAll(pageable);
+//        List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
 //        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
-//    }
-//
-//    @Override
-//    public SellerProfileResponseDto getSellerProfile(Long sellerId){
-//        SellerProfile sellerProfile = sellerRepository.findById(sellerId).orElseThrow(
-//                () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
-//        );
-//        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(sellerProfile);
-//        return sellerProfileResponseDto;
-//    }
+//    } //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
+
+    @Override
+    public SellerProfileResponseDto getSellerProfile(Long sellerId){
+        SellerProfile sellerProfile = sellerRepository.findById(sellerId).orElseThrow(
+                () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
+        );
+        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(sellerProfile);
+        return sellerProfileResponseDto;
+    }
 
     @Override
     public UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id) {

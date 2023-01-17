@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.controller;
 
+import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.user.dto.UserOrderDto;
 import com.example.applefarm_.user.dto.SellerRegistrationDto;
 import com.example.applefarm_.security.user.UserDetailsImpl;
@@ -38,16 +39,16 @@ public class UserController {
         return new UserProfileResponseDto(user.getUser());
     }
 
-//    @GetMapping("/customer/sellerprofile/{id}")
-//    public UserProfileResponseDto getSellerProfile(@PathVariable Long sellerId) {
-//        return userService.getCustomerProfile(sellerId);
-//    }
+    @GetMapping("/customer/sellerprofile/{id}")
+    public SellerProfileResponseDto getSellerProfile(@PathVariable Long sellerId) {
+        return userService.getSellerProfile(sellerId);
+    }
 //
-//    @GetMapping("/productlist")
-//    public ResponseEntity getProductList(@RequestParam("page") int page, @RequestParam("size") int size) {
-//        return userService.getProductList(page, size);
-//    }
-//
+    @GetMapping("/productlist")
+    public ResponseEntity getProductList(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return userService.getProductList(page, size);
+    }
+
 //    @GetMapping("/sellerlist")
 //    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
 //        return userService.getSellerList(page, size);
