@@ -38,9 +38,11 @@ public class UserServiceImpl implements UserService {
         if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
+        String nickName = signupRequestDto.getNickName();
+        String image = signupRequestDto.getImage();
         // 사용자 가입
         UserRoleEnum role = UserRoleEnum.CUSTOMER;
-        User user = new User(loginId, loginPassword, role);
+        User user = new User(loginId, loginPassword, nickName, image, role);
         userRepository.save(user);
     }
 
