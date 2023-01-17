@@ -1,8 +1,9 @@
 package com.example.applefarm_.user.entitiy;
 
 import lombok.Getter;
+import com.example.applefarm_.security.config.Timestamp;
+import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import lombok.NoArgsConstructor;
-import org.springframework.context.annotation.Role;
 
 import javax.persistence.*;
 
@@ -43,4 +44,9 @@ public class User {
     }
 
 
+
+    public void update(UserProfileRequestDto userProfileRequestDto) {
+        this.nickname = userProfileRequestDto.getNickname();
+        this.image = userProfileRequestDto.getImage();
+    }
 }

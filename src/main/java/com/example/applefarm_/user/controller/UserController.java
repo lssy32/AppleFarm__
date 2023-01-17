@@ -1,10 +1,19 @@
 package com.example.applefarm_.user.controller;
 
+import com.example.applefarm_.user.dto.UserOrderDto;
+import com.example.applefarm_.user.dto.SellerRegistrationDto;
+import com.example.applefarm_.security.user.UserDetailsImpl;
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
+import com.example.applefarm_.user.dto.UserProfileRequestDto;
+import com.example.applefarm_.user.dto.UserProfileResponseDto;
 import com.example.applefarm_.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
@@ -24,4 +33,30 @@ public class UserController {
         userService.signin(loginRequestDto, response);
     }
 
+    @GetMapping("/customer/profile")
+    public UserProfileResponseDto getCustomerProfile(@AuthenticationPrincipal UserDetailsImpl user) {
+        return new UserProfileResponseDto(user.getUser());
+    }
+
+//    @GetMapping("/customer/sellerprofile/{id}")
+//    public UserProfileResponseDto getSellerProfile(@PathVariable Long sellerId) {
+//        return userService.getCustomerProfile(sellerId);
+//    }
+//
+//    @GetMapping("/productlist")
+//    public ResponseEntity getProductList(@RequestParam("page") int page, @RequestParam("size") int size) {
+//        return userService.getProductList(page, size);
+//    }
+//
+//    @GetMapping("/sellerlist")
+//    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
+//        return userService.getSellerList(page, size);
+//    }
+
+
+    @PutMapping("/profile")
+    public UserProfileResponseDto editUserProfile (@RequestBody UserProfileRequestDto
+    userProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.editUserProfile(userProfileRequestDto, userDetails.getUser().getId());
+    }
 }

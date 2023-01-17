@@ -1,4 +1,4 @@
-package com.example.applefarm_.customer.dto;
+package com.example.applefarm_.user.dto;
 
 public class SellerRegistrationDto {
     private String sellerNickname;
