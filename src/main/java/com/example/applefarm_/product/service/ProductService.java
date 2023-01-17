@@ -27,6 +27,20 @@ public class ProductService {
     public List<ProductResponse> getProductList() {
         return ProductResponse.of(productRepository.findAllByOrderByModifiedAtDesc());
 
-
     }
+    @Transactional
+    public void updateProduct(Long id, User user) {
+        Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+                ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
+        );
+    }
+
+    @Transactional
+    public void deleteProduct(Long id, User user) {
+        Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+                ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
+        );
+    }
+
+
 }

@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,17 +24,30 @@ public class ProductController {
         return ResponseEntity.ok("판매상품 등록 완료");
     }
 
-    //판매상품 조회, 내가 판매중인 상품 목록을 페이징하며 조회
+    //판매상품 조회 Todo 페이징처리
     @GetMapping("")
     public ResponseEntity getProductList(){
         productService.getProductList();
         return ResponseEntity.ok(" 판매상품 조회 완료");
     }
+    //판매상품 수정
+    @PutMapping("/{id}")
+    public ResponseEntity updateProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        productService.updateProduct(id,userDetails.getUser());
+        return ResponseEntity.ok("판매상품 수정 완료");
+    }
+
+
+
 
     //판매상품 삭제 , 판매 상품 정보를 작성하여 목록에서 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        productService.deleteProduct(id,userDetails.getUser());
+        return ResponseEntity.ok("판매 상품 삭제 완료");
+    }
 
     //고객 요청 목록 조회 ? ,고객요청 목록 조회 : 모든상품의 고객요청 목록을 페이징하며 조회??
-
     //고객 요청 처리 ?
 
 }
