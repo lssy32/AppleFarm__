@@ -2,7 +2,6 @@ package com.example.applefarm_.security.jwt;
 
 
 
-import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;

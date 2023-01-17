@@ -2,6 +2,7 @@ package com.example.applefarm_.user.entitiy;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Role;
 
 import javax.persistence.*;
 
@@ -33,5 +34,13 @@ public class User {
         this.loginPassword = loginPassword;
         this.role = role;
     }
+
+    public void changeSellerByCustomer(){  // 커스터머 > 셀러
+        this.role = UserRoleEnum.SELLER;
+    }
+    public void changeCustomerBySeller(){ // 셀러 > 커스터머
+        this.role = UserRoleEnum.CUSTOMER;
+    }
+
 
 }

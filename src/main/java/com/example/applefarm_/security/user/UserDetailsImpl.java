@@ -1,7 +1,6 @@
 package com.example.applefarm_.security.user;
 
 import com.example.applefarm_.user.entitiy.User;
-import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
