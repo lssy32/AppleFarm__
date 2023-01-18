@@ -23,15 +23,15 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductResponse saveProduct(ProductRequest request, User user) {
-        Product product = productRepository.save(new Product(request,user));
+    public ProductResponse saveProduct(ProductRequest request, User seller) {
+        Product product = productRepository.save(new Product(request,seller));
         return new ProductResponse(product);
     }
 
 
     @Transactional
     public List<ProductResponse> getProducts(int pageChoice, User user) {
-        Page<Product> products = productRepository.findAllByUserId(user.getId(),pageableSetting(pageChoice));
+        Page<Product> products = productRepository.findAllBySellerId(user.getId(),pageableSetting(pageChoice));
         List<ProductResponse> productResponseList = products.stream().map(ProductResponse::new).collect(Collectors.toList());
         return productResponseList;
     }
@@ -45,7 +45,7 @@ public class ProductService {
 
     @Transactional
     public void updateProduct(Long id, User user,ProductRequest productRequest) {
-        Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
         );
         foundProduct.updateProduct(productRequest);
@@ -53,7 +53,7 @@ public class ProductService {
 
     @Transactional
     public void deleteProduct(Long id, User user) {
-        Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
+        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("해당 판매상품이 존재하지 않습니다.")
         );
         productRepository.deleteById(id);

@@ -26,7 +26,7 @@ public class Orders {
     private int isDeleted;
 
     public Orders(Product product, Long customerId, int quantity) {
-        this.sellerId = product.getId();
+        this.sellerId = product.getSellerId();
         this.customerId = customerId;
         this.productId = product.getId();
         this.quantity = quantity;
