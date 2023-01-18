@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.service;
 
+import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.user.dto.UserOrderDto;
 import com.example.applefarm_.user.dto.SellerRegistrationDto;
 import com.example.applefarm_.user.dto.LoginRequestDto;
@@ -20,12 +21,12 @@ public interface UserService {
     @Transactional(readOnly = true)
     void signin(LoginRequestDto loginRequestDto, HttpServletResponse response);
 
-//    @Transactional(readOnly = true)
-//    SellerProfileResponseDto getSellerProfile(Long seller id);
+    @Transactional(readOnly = true)
+    SellerProfileResponseDto getSellerProfile(Long sellerId);
 
-//    @Transactional
-//    ResponseEntity getProductList(int page, int size);
-//
+    @Transactional
+    ResponseEntity getProductList(int page, int size);
+
 //    @Transactional
 //    ResponseEntity getSellerList(int page, int size);
 
