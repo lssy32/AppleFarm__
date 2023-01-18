@@ -1,6 +1,7 @@
 package com.example.applefarm_.admin.controller;
 
 import com.example.applefarm_.admin.service.AdminServiceImpl;
+import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,5 +35,10 @@ public class AdminController {
     @PutMapping("/modifideroleSeller/{id}")
     public void modifideroleSeller(@PathVariable Long id){
         adminService.modifideroleSeller(id);
+    }
+
+    @GetMapping("/regists")
+    public List<RegistrationResponseDto> findRegistrationList() {
+        return adminService.findRegistrationList();
     }
 }

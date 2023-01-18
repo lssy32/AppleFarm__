@@ -1,6 +1,7 @@
 package com.example.applefarm_.admin.service;
 
 
+import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.registration.entity.Registration;
 import com.example.applefarm_.registration.repository.RegistrationRepository;
 import com.example.applefarm_.user.dto.UserResponseDto;
@@ -71,4 +72,15 @@ public class AdminServiceImpl implements AdminService {
             user.changeCustomerBySeller();
         }else {throw new IllegalArgumentException("현재 사용자는 Seller가 아닙니다.");}
     }
+
+    @Override
+    @Transactional
+    public List<RegistrationResponseDto> findRegistrationList() {
+        List<Registration> registrations = registrationRepository.findAll();
+        List<RegistrationResponseDto> registrationResult = new ArrayList<>();
+        for (Registration registration: registrations) {
+            registrationResult.add(new RegistrationResponseDto(registration));
+        }
+        return registrationResult;
+    };
 }
