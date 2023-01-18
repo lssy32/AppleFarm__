@@ -60,4 +60,11 @@ public class User extends Timestamp {
         this.nickName = userProfileRequestDto.getNickname();
         this.image = userProfileRequestDto.getImage();
     }
+
+    public void updateSellerProfile(String sellerNickname, String sellerImage, String sellerDetails, Long sellerCategory) {
+        this.sellerNickname = sellerNickname;
+        this.sellerImage = sellerImage;
+        this.sellerDetails = sellerDetails;
+        this.sellerCategory = sellerCategory;
+    }
 }
