@@ -30,12 +30,7 @@ public class ProductController {
         productService.saveProduct(request,userDetails.getUser());
         return ResponseEntity.ok("판매상품 등록 완료");
     }
-
-    //판매상품 조회
-//    @GetMapping("/{pageChoice}")
-//    public List<ProductResponse> getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
-//        return productService.getProducts(pageChoice,userDetails.getUser());
-//    }
+    
 
     @GetMapping("/{pageChoice}")
     public ResponseEntity getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
