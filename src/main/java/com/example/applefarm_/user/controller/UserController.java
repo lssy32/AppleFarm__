@@ -11,6 +11,7 @@ import com.example.applefarm_.user.dto.UserProfileResponseDto;
 import com.example.applefarm_.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +41,8 @@ public class UserController {
     }
 
     @GetMapping("/customer/sellerprofile/{id}")
-    public SellerProfileResponseDto getSellerProfile(@PathVariable Long sellerId) {
-        return userService.getSellerProfile(sellerId);
+    public SellerProfileResponseDto getSellerProfile(@PathVariable Long id) {
+        return userService.getSellerProfile(id);
     }
 //
     @GetMapping("/productlist")
@@ -49,10 +50,10 @@ public class UserController {
         return userService.getProductList(page, size);
     }
 
-//    @GetMapping("/sellerlist")
-//    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
-//        return userService.getSellerList(page, size);
-//    }
+    @GetMapping("/sellerlist")
+    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return userService.getSellerList(page, size);
+    }
 
 
     @PutMapping("/profile")
@@ -60,12 +61,5 @@ public class UserController {
     userProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.editUserProfile(userProfileRequestDto, userDetails.getUser().getId());
     }
-    @PutMapping("/modifideroleCustomer/{id}")
-    public void modifideroleCustomer(@PathVariable Long id){
-        userService.modifideroleCustomer(id);
-    }
-    @PutMapping("/modifideroleSeller/{id}")
-    public void modifideroleSeller(@PathVariable Long id){
-        userService.modifideroleSeller(id);
-    }
+
 }

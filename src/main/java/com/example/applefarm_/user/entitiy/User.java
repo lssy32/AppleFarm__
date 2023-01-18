@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.entitiy;
 
+import com.example.applefarm_.registration.entity.Registration;
 import com.example.applefarm_.security.config.Timestamp;
 import lombok.Getter;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
@@ -32,7 +33,7 @@ public class User extends Timestamp {
     private String sellerNickname;
     private String sellerImage;
     private String sellerDetails;
-    private String sellerCategory;
+    private Long sellerCategory;
 
     public User(String loginId, String loginPassword, String nickName, String image, UserRoleEnum role) {
         this.loginId = loginId;
@@ -42,8 +43,12 @@ public class User extends Timestamp {
         this.role = role;
     }
 
-    public void changeSellerByCustomer(){  // 커스터머 > 셀러
+    public void changeSellerByCustomer(Registration registration){  // 커스터머 > 셀러
         this.role = UserRoleEnum.SELLER;
+        this.sellerNickname = registration.getSellerNickname();
+        this.sellerImage = registration.getSellerImage();
+        this.sellerDetails = registration.getSellerDetail();
+        this.sellerCategory = registration.getCategory();
     }
     public void changeCustomerBySeller(){ // 셀러 > 커스터머
         this.role = UserRoleEnum.CUSTOMER;
@@ -54,5 +59,12 @@ public class User extends Timestamp {
     public void update(UserProfileRequestDto userProfileRequestDto) {
         this.nickName = userProfileRequestDto.getNickname();
         this.image = userProfileRequestDto.getImage();
+    }
+
+    public void updateSellerProfile(String sellerNickname, String sellerImage, String sellerDetails, Long sellerCategory) {
+        this.sellerNickname = sellerNickname;
+        this.sellerImage = sellerImage;
+        this.sellerDetails = sellerDetails;
+        this.sellerCategory = sellerCategory;
     }
 }

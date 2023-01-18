@@ -14,7 +14,7 @@ public class SellerProfileResponseDto {
     private final String sellerNickname;
     private final String sellerImage;
     private final String sellerDetails;
-    private final String sellerCategory;
+    private final Long sellerCategory;
 
     public SellerProfileResponseDto(User user) {
         this.sellerId = user.getId();
@@ -29,6 +29,6 @@ public class SellerProfileResponseDto {
         this.sellerNickname = sellerProfile.getSellerNickname();
         this.sellerImage = sellerProfile.getSellerImage();
         this.sellerDetails = sellerProfile.getSellerDetail();
-        this.sellerCategory = String.valueOf(sellerProfile.getCategory());
+        this.sellerCategory = sellerProfile.getCategory();
     }
 }

@@ -1,9 +1,13 @@
 package com.example.applefarm_.user.service;
 
 
+import com.example.applefarm_.exception.CustomException;
+import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
+import com.example.applefarm_.registration.entity.Registration;
+import com.example.applefarm_.registration.repository.RegistrationRepository;
 import com.example.applefarm_.security.jwt.JwtUtil;
 import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.seller.entitiy.SellerProfile;
@@ -23,6 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.Role;
 import javax.servlet.http.HttpServletResponse;
@@ -39,19 +44,19 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final SellerRepository sellerRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
+    @Transactional
     public void signup(SignupRequestDto signupRequestDto) throws IllegalArgumentException {
         String loginId = signupRequestDto.getLoginId();
         String loginPassword = passwordEncoder.encode(signupRequestDto.getLoginPassword());
         // 회원 중복 확인
         Optional<User> found = userRepository.findByLoginId(loginId);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new CustomException(ExceptionStatus.UserId_IS_EXIST);
         }
         String nickName = signupRequestDto.getNickName();
         String image = signupRequestDto.getImage();
@@ -62,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
@@ -76,6 +82,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity getProductList(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAll(pageable);
@@ -83,24 +90,30 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
     }
 
-//    @Override
-//    public ResponseEntity getSellerList(int page, int size){
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<SellerProfile> sellerProfiles = sellerRepository.findAll(pageable);
-//        List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
-//        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
-//    } //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
+    @Override
+    public ResponseEntity getSellerList(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> sellerProfiles = userRepository.findAllByRole(UserRoleEnum.SELLER, pageable);
+        List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.getContent().stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
+        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
+    }
+     //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
 
     @Override
-    public SellerProfileResponseDto getSellerProfile(Long sellerId){
-        SellerProfile sellerProfile = sellerRepository.findById(sellerId).orElseThrow(
+    @Transactional(readOnly = true)
+    public SellerProfileResponseDto getSellerProfile(Long id){
+        User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
         );
-        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(sellerProfile);
+        if(user.getRole().compareTo(SELLER)!=0){
+            throw new IllegalArgumentException("이 유저는 판매자가 아닙니다.");
+        }
+        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(user);
         return sellerProfileResponseDto;
     }
 
     @Override
+    @Transactional
     public UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("고객 정보가 존재하지 않습니다.")
@@ -110,24 +123,4 @@ public class UserServiceImpl implements UserService {
         return new UserProfileResponseDto(user);
     }
 
-    @Override
-    public void modifideroleCustomer(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == CUSTOMER){
-            user.changeSellerByCustomer();
-        }else {
-            throw new IllegalArgumentException("현재 사용자는 Customer가 아닙니다.");
-        }
-    }
-    @Override
-    public void modifideroleSeller(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == SELLER){
-            user.changeCustomerBySeller();
-        }else {throw new IllegalArgumentException("현재 사용자는 Seller가 아닙니다.");}
-    }
 }

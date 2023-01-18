@@ -17,8 +17,8 @@ public class Product {
 
    // @ManyToOne(fetch = FetchType.LAZY)
   //  @JoinColumn(name = "user_id") //판매자 ID (FK)
-    @Column
-     private Long userId;
+   @Column(nullable = false, name = "seller_id")
+   private Long sellerId;
 
 
     @Column(nullable = false, name = "product_name")
@@ -39,7 +39,8 @@ public class Product {
     @Column(nullable = false, name = "product_category")
     private Long productCategory;
 
-    public Product(ProductRequest request, User user) {
+    public Product(ProductRequest request, User seller) {
+        this.sellerId = seller.getId();
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();

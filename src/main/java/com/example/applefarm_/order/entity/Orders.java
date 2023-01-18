@@ -1,5 +1,7 @@
 package com.example.applefarm_.order.entity;
 
+import com.example.applefarm_.exception.CustomException;
+import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.product.entitiy.Product;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +28,7 @@ public class Orders {
     private int isDeleted;
 
     public Orders(Product product, Long customerId, int quantity) {
-        this.sellerId = product.getId();
+        this.sellerId = product.getSellerId();
         this.customerId = customerId;
         this.productId = product.getId();
         this.quantity = quantity;
@@ -34,6 +36,7 @@ public class Orders {
     }
 
     public void orderCompletionProcessing(){
+        if(this.isDeleted == 1) throw new CustomException(ExceptionStatus.Already_IS_DELETED);
         this.isDeleted = 1;
     }
 

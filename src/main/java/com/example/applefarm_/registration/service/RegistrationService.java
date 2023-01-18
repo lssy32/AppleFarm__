@@ -14,6 +14,9 @@ public class RegistrationService {
     private final RegistrationRepository registrationRepository;
     @Transactional
     public void sellerRegist(RegistrationRequestDto registrationRequestDto, Long id) {
+        if(registrationRepository.findByUserId(id).isPresent()){
+            throw new IllegalArgumentException("이미 신청하셨습니다.");
+        }
         Registration registration = new Registration(registrationRequestDto, id);
         registrationRepository.save(registration);
     }

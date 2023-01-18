@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/products")
+@RequestMapping("/api/sellers/products")
 public class ProductController {
 
     private final ProductService productService;
@@ -33,9 +33,8 @@ public class ProductController {
     
 
     @GetMapping("/{pageChoice}")
-    public ResponseEntity getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
-         productService.getProducts(pageChoice,userDetails.getUser());
-         return ResponseEntity.ok("판매상품 페이지 조회 완료 ");
+    public List<ProductResponse> getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return productService.getProducts(pageChoice,userDetails.getUser());
     }
 
 
