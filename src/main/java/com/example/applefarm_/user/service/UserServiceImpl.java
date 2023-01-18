@@ -72,10 +72,10 @@ public class UserServiceImpl implements UserService {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
         User user = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
         );
         if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getLoginId(), user.getRole()));
     }
@@ -97,16 +97,15 @@ public class UserServiceImpl implements UserService {
         List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.getContent().stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
         return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
     }
-     //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
 
     @Override
     @Transactional(readOnly = true)
     public SellerProfileResponseDto getSellerProfile(Long id){
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.SELLER_INFORMATION_IS_EMPTY)
         );
         if(user.getRole().compareTo(SELLER)!=0){
-            throw new IllegalArgumentException("이 유저는 판매자가 아닙니다.");
+            throw new CustomException(ExceptionStatus.NOT_SELLER);
         }
         SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(user);
         return sellerProfileResponseDto;
@@ -116,7 +115,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("고객 정보가 존재하지 않습니다.")
+                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
         );
         user.update(userProfileRequestDto);
         userRepository.save(user);
