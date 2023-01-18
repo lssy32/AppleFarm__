@@ -12,6 +12,4 @@ public interface AdminService {
     @Transactional
     List<UserResponseDto> findSellerList();
 
-    void modifideroleCustomer(Long id);
-    void modifideroleSeller(Long id);
 }
