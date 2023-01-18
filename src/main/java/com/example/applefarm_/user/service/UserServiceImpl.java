@@ -1,6 +1,8 @@
 package com.example.applefarm_.user.service;
 
 
+import com.example.applefarm_.exception.CustomException;
+import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
         // 회원 중복 확인
         Optional<User> found = userRepository.findByLoginId(loginId);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new CustomException(ExceptionStatus.UserId_IS_EXIST);
         }
         String nickName = signupRequestDto.getNickName();
         String image = signupRequestDto.getImage();

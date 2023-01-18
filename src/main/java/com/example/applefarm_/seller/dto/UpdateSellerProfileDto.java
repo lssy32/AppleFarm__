@@ -16,6 +16,6 @@ public class UpdateSellerProfileDto {
     @NotNull(message = "소개글에는 공백이 들어갈 수 없습니다.")
     private final String sellerDetails;
     @NotNull(message = "매칭주제정보에는 공백이 들어갈 수 없습니다.")
-    private final String sellerCategory;
+    private final Long sellerCategory;
 
 }
