@@ -60,4 +60,12 @@ public class UserController {
     userProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.editUserProfile(userProfileRequestDto, userDetails.getUser().getId());
     }
+    @PutMapping("/modifideroleCustomer/{id}")
+    public void modifideroleCustomer(@PathVariable Long id){
+        userService.modifideroleCustomer(id);
+    }
+    @PutMapping("/modifideroleSeller/{id}")
+    public void modifideroleSeller(@PathVariable Long id){
+        userService.modifideroleSeller(id);
+    }
 }

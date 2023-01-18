@@ -41,25 +41,5 @@ public class AdminServiceImpl implements AdminService {
         return sellerResult;
     }
 
-    @Override
-    public void modifideroleCustomer(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == CUSTOMER){
-            user.changeSellerByCustomer();
-        }else {
-            throw new IllegalArgumentException("이 사용자는 Customer가 아닙니다.");
-        }
-    }
-    @Override
-    public void modifideroleSeller(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == SELLER){
-            user.changeCustomerBySeller();
-        }else {throw new IllegalArgumentException("이 사용자는 Seller가 아닙니다.");}
-    }
 
 }
