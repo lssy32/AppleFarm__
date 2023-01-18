@@ -14,16 +14,25 @@ import java.util.List;
 @RequestMapping("/api/admin")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
-    private final AdminServiceImpl adminrService;
+    private final AdminServiceImpl adminService;
 
     @GetMapping("/users")
     public List<UserResponseDto> findByCustomerList() {
-        return adminrService.findCustomerList();
+        return adminService.findCustomerList();
     }
 
     @GetMapping("/sellers")
     public List<UserResponseDto> findBySellerList() {
-        return adminrService.findSellerList();
+        return adminService.findSellerList();
     }
 
+    @PutMapping("/modifideroleCustomer/{id}")
+    public void modifideroleCustomer(@PathVariable Long id){
+        adminService.modifideroleCustomer(id);
+    }
+
+    @PutMapping("/modifideroleSeller/{id}")
+    public void modifideroleSeller(@PathVariable Long id){
+        adminService.modifideroleSeller(id);
+    }
 }
