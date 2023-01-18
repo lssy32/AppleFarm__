@@ -32,4 +32,8 @@ public interface UserService {
 
     @Transactional
     UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id);
+
+
+    void modifideroleCustomer(Long id);
+    void modifideroleSeller(Long id);
 }
