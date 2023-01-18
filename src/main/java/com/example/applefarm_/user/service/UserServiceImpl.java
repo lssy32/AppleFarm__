@@ -4,6 +4,8 @@ package com.example.applefarm_.user.service;
 import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
+import com.example.applefarm_.registration.entity.Registration;
+import com.example.applefarm_.registration.repository.RegistrationRepository;
 import com.example.applefarm_.security.jwt.JwtUtil;
 import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.seller.entitiy.SellerProfile;
@@ -23,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.Role;
 import javax.servlet.http.HttpServletResponse;
@@ -40,11 +43,13 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final SellerRepository sellerRepository;
+    private final RegistrationRepository registrationRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
 
     @Override
+    @Transactional
     public void signup(SignupRequestDto signupRequestDto) throws IllegalArgumentException {
         String loginId = signupRequestDto.getLoginId();
         String loginPassword = passwordEncoder.encode(signupRequestDto.getLoginPassword());
@@ -62,6 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
@@ -76,6 +82,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseEntity getProductList(int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAll(pageable);
@@ -93,6 +100,7 @@ public class UserServiceImpl implements UserService {
      //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
 
     @Override
+    @Transactional(readOnly = true)
     public SellerProfileResponseDto getSellerProfile(Long sellerId){
         SellerProfile sellerProfile = sellerRepository.findById(sellerId).orElseThrow(
                 () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
@@ -102,6 +110,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("고객 정보가 존재하지 않습니다.")
@@ -112,17 +121,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void modifideroleCustomer(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
         );
         if(user.getRole() == CUSTOMER){
-            user.changeSellerByCustomer();
+            Registration registration = registrationRepository.findByUserId(id).orElseThrow(
+                    () -> new IllegalArgumentException("판매자 등록 요청이 존재하지 않습니다.")
+            );
+            user.changeSellerByCustomer(registration);
         }else {
             throw new IllegalArgumentException("현재 사용자는 Customer가 아닙니다.");
         }
     }
     @Override
+    @Transactional
     public void modifideroleSeller(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("등록된 사용자가 없습니다.")

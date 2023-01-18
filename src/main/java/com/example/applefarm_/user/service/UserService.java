@@ -15,22 +15,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface UserService {
-    @Transactional
+
     void signup(SignupRequestDto signupRequestDto);
 
-    @Transactional(readOnly = true)
+
     void signin(LoginRequestDto loginRequestDto, HttpServletResponse response);
 
-    @Transactional(readOnly = true)
     SellerProfileResponseDto getSellerProfile(Long sellerId);
 
-    @Transactional
+
     ResponseEntity getProductList(int page, int size);
 
     @Transactional
     ResponseEntity getSellerList(int page, int size);
 
-    @Transactional
+
     UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id);
 
 
