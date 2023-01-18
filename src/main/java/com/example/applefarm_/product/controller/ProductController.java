@@ -1,6 +1,7 @@
 package com.example.applefarm_.product.controller;
 
 import com.example.applefarm_.product.dto.ProductRequest;
+import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.service.ProductService;
 import com.example.applefarm_.security.user.UserDetailsImpl;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,6 +31,17 @@ public class ProductController {
         return ResponseEntity.ok("판매상품 등록 완료");
     }
 
+    //판매상품 조회
+//    @GetMapping("/{pageChoice}")
+//    public List<ProductResponse> getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
+//        return productService.getProducts(pageChoice,userDetails.getUser());
+//    }
+
+    @GetMapping("/{pageChoice}")
+    public ResponseEntity getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
+         productService.getProducts(pageChoice,userDetails.getUser());
+         return ResponseEntity.ok("판매상품 페이지 조회 완료 ");
+    }
 
 
     //판매상품 수정

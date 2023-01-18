@@ -7,11 +7,14 @@ import com.example.applefarm_.product.repository.ProductRepository;
 import com.example.applefarm_.user.entitiy.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,20 @@ public class ProductService {
         return new ProductResponse(product);
     }
 
+
+    @Transactional
+    public List<ProductResponse> getProducts(int pageChoice, User user) {
+        Page<Product> products = productRepository.findAllByUserId(user.getId(),pageableSetting(pageChoice));
+        List<ProductResponse> productResponseList = products.stream().map(ProductResponse::new).collect(Collectors.toList());
+        return productResponseList;
+    }
+
+    private Pageable pageableSetting(int pageChoice) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction,"id");
+        Pageable pageable = PageRequest.of(pageChoice-1,4,sort);
+        return pageable;
+    }
 
     @Transactional
     public void updateProduct(Long id, User user,ProductRequest productRequest) {
