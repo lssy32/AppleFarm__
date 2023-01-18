@@ -17,14 +17,14 @@ import java.util.List;
 public class AdminController {
     private final AdminServiceImpl adminService;
 
-    @GetMapping("/users")
-    public List<UserResponseDto> findByCustomerList() {
-        return adminService.findCustomerList();
+    @GetMapping("/users/{pageChoice}")
+    public List<UserResponseDto> findByCustomerList(@PathVariable int pageChoice) {
+        return adminService.findCustomerList(pageChoice);
     }
 
-    @GetMapping("/sellers")
-    public List<UserResponseDto> findBySellerList() {
-        return adminService.findSellerList();
+    @GetMapping("/sellers/{pageChoice}")
+    public List<UserResponseDto> findBySellerList(@PathVariable int pageChoice) {
+        return adminService.findSellerList(pageChoice);
     }
 
     @PutMapping("/modifideroleCustomer/{id}")

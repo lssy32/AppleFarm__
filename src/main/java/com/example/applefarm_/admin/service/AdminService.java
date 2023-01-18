@@ -9,10 +9,10 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<UserResponseDto> findCustomerList();
+    List<UserResponseDto> findCustomerList(int pageChoice);
 
 
-    List<UserResponseDto> findSellerList();
+    List<UserResponseDto> findSellerList(int pageChoice);
 
     void modifideroleCustomer(Long id);
 
