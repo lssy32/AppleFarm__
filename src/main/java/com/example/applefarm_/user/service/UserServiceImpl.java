@@ -101,11 +101,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public SellerProfileResponseDto getSellerProfile(Long sellerId){
-        SellerProfile sellerProfile = sellerRepository.findById(sellerId).orElseThrow(
+    public SellerProfileResponseDto getSellerProfile(Long id){
+        User user = userRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("판매자 정보가 존재하지 않습니다.")
         );
-        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(sellerProfile);
+        if(user.getRole().compareTo(SELLER)!=0){
+            throw new IllegalArgumentException("이 유저는 판매자가 아닙니다.");
+        }
+        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(user);
         return sellerProfileResponseDto;
     }
 

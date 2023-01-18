@@ -21,7 +21,7 @@ public interface UserService {
 
     void signin(LoginRequestDto loginRequestDto, HttpServletResponse response);
 
-    SellerProfileResponseDto getSellerProfile(Long sellerId);
+    SellerProfileResponseDto getSellerProfile(Long id);
 
 
     ResponseEntity getProductList(int page, int size);

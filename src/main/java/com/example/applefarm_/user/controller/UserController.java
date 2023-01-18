@@ -40,8 +40,8 @@ public class UserController {
     }
 
     @GetMapping("/customer/sellerprofile/{id}")
-    public SellerProfileResponseDto getSellerProfile(@PathVariable Long sellerId) {
-        return userService.getSellerProfile(sellerId);
+    public SellerProfileResponseDto getSellerProfile(@PathVariable Long id) {
+        return userService.getSellerProfile(id);
     }
 //
     @GetMapping("/productlist")
