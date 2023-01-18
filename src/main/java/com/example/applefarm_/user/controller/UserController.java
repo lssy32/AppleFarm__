@@ -65,6 +65,7 @@ public class UserController {
     public void modifideroleCustomer(@PathVariable Long id){
         userService.modifideroleCustomer(id);
     }
+
     @PutMapping("/modifideroleSeller/{id}")
     public void modifideroleSeller(@PathVariable Long id){
         userService.modifideroleSeller(id);
