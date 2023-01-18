@@ -26,8 +26,8 @@ public interface UserService {
 
     ResponseEntity getProductList(int page, int size);
 
-//    @Transactional
-//    ResponseEntity getSellerList(int page, int size);
+    @Transactional
+    ResponseEntity getSellerList(int page, int size);
 
 
     UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id);

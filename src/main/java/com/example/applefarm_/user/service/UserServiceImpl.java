@@ -90,13 +90,14 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
     }
 
-//    @Override
-//    public ResponseEntity getSellerList(int page, int size){
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<SellerProfile> sellerProfiles = sellerRepository.findAll(pageable);
-//        List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
-//        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
-//    } //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
+    @Override
+    public ResponseEntity getSellerList(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> sellerProfiles = userRepository.findAllByRole(UserRoleEnum.SELLER, pageable);
+        List<SellerProfileResponseDto> productReponseDtoList = sellerProfiles.getContent().stream().map(sellerProfile -> new SellerProfileResponseDto(sellerProfile)).collect(Collectors.toList());
+        return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
+    }
+     //TODO: 판매자의 정보를 저장하는 repository에 정보가 저장되어야함
 
     @Override
     @Transactional(readOnly = true)
