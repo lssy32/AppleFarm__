@@ -1,13 +1,11 @@
 package com.example.applefarm_.seller.dto;
 
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(force = true, access = AccessLevel.PROTECTED)
 public class UpdateSellerProfileDto {
     @NotNull(message = "닉네임에는 공백이 들어갈 수 없습니다.")
     private final String sellerNickname;

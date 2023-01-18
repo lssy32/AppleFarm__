@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ExceptionStatus {
 
     UserId_IS_EXIST(409, " 이미 등록된 아이디입니다. "),
+    Already_IS_DELETED(409, "이미 삭제 된 오더입니다."),
     Product_IS_NOT_EXIST(404, " 상품이 존재하지 않습니다. "),
     Order_IS_NOT_EXIST(404, " 주문내역이 존재하지 않습니다. "),
     Seller_IS_NOT_EXIST(404, "판매자가 존재하지 않습니다."),
