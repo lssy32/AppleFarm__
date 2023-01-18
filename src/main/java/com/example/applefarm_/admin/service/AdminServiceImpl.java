@@ -1,6 +1,8 @@
 package com.example.applefarm_.admin.service;
 
 
+import com.example.applefarm_.exception.CustomException;
+import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.registration.entity.Registration;
 import com.example.applefarm_.registration.repository.RegistrationRepository;
@@ -58,26 +60,26 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     public void modifideroleCustomer(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () ->  new CustomException(ExceptionStatus.DOESN_NOT_USER)
         );
         if(user.getRole() == CUSTOMER){
             Registration registration = registrationRepository.findByUserId(id).orElseThrow(
-                    () -> new IllegalArgumentException("판매자 등록 요청이 존재하지 않습니다.")
+                    () -> new CustomException(ExceptionStatus.REQURES_IS_EMPTY)
             );
             user.changeSellerByCustomer(registration);
         }else {
-            throw new IllegalArgumentException("현재 사용자는 Customer가 아닙니다.");
+            throw new CustomException(ExceptionStatus.NOT_CUSTOMER);
         }
     }
     @Override
     @Transactional
     public void modifideroleSeller(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
+                () ->  new CustomException(ExceptionStatus.DOESN_NOT_USER)
         );
         if(user.getRole() == SELLER){
             user.changeCustomerBySeller();
-        }else {throw new IllegalArgumentException("현재 사용자는 Seller가 아닙니다.");}
+        }else {throw new CustomException(ExceptionStatus.NOT_SELLER);}
     }
 
     @Override

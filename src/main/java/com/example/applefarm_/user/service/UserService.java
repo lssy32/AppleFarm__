@@ -31,5 +31,6 @@ public interface UserService {
 
 
     UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id);
+    void signout(LoginRequestDto loginRequestDto, HttpServletResponse response);
 
 }
