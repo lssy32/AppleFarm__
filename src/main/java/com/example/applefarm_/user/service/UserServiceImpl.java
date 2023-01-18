@@ -44,8 +44,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
-    private final SellerRepository sellerRepository;
-    private final RegistrationRepository registrationRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -125,29 +123,4 @@ public class UserServiceImpl implements UserService {
         return new UserProfileResponseDto(user);
     }
 
-    @Override
-    @Transactional
-    public void modifideroleCustomer(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == CUSTOMER){
-            Registration registration = registrationRepository.findByUserId(id).orElseThrow(
-                    () -> new IllegalArgumentException("판매자 등록 요청이 존재하지 않습니다.")
-            );
-            user.changeSellerByCustomer(registration);
-        }else {
-            throw new IllegalArgumentException("현재 사용자는 Customer가 아닙니다.");
-        }
-    }
-    @Override
-    @Transactional
-    public void modifideroleSeller(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-        );
-        if(user.getRole() == SELLER){
-            user.changeCustomerBySeller();
-        }else {throw new IllegalArgumentException("현재 사용자는 Seller가 아닙니다.");}
-    }
 }
