@@ -7,6 +7,13 @@ import lombok.Getter;
 @Getter
 public enum ExceptionStatus {
 
+
+    PASSWORDS_DO_NOT_MATCH(403,"비밀번호가 일치 하지 않습니다."),
+    SELLER_INFORMATION_IS_EMPTY(404,"판매자 정보가 존재하지 않습니다."),
+    REQURES_IS_EMPTY(404,"요청이 존재 하지 않습니다."),
+    DOESN_NOT_USER(403,"사용자가 존재 하지 않습니다."),
+    NOT_SELLER(403,"현재 사용자는 Seller 가 아닙니다. "),
+    NOT_CUSTOMER(403,"현재 사용자는 Customer 가 아닙니다. "),
     UserId_IS_EXIST(409, " 이미 등록된 아이디입니다. "),
     Already_IS_DELETED(409, "이미 삭제 된 오더입니다."),
     Product_IS_NOT_EXIST(404, " 상품이 존재하지 않습니다. "),
