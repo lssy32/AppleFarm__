@@ -49,10 +49,10 @@ public class UserController {
         return userService.getProductList(page, size);
     }
 
-//    @GetMapping("/sellerlist")
-//    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
-//        return userService.getSellerList(page, size);
-//    }
+    @GetMapping("/sellerlist")
+    public ResponseEntity getSellerList(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return userService.getSellerList(page, size);
+    }
 
 
     @PutMapping("/profile")
@@ -60,6 +60,7 @@ public class UserController {
     userProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.editUserProfile(userProfileRequestDto, userDetails.getUser().getId());
     }
+
     @PutMapping("/modifideroleCustomer/{id}")
     public void modifideroleCustomer(@PathVariable Long id){
         userService.modifideroleCustomer(id);
