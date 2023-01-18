@@ -25,13 +25,7 @@ public class ProductService {
         return new ProductResponse(product);
     }
 
-    //Todo 페이징처리
-//    @Transactional
-//    public Page<ProductResponse> getProductList(Pageable pageable) {
-//        Page<Product> productsPage = productRepository.findAll(pageable);
-//        Page<ProductResponse> productResponseDtoPage = ProductResponse.toDtoPage(productsPage);
-//        return productResponseDtoPage;
-//    }
+
     @Transactional
     public void updateProduct(Long id, User user,ProductRequest productRequest) {
         Product foundProduct = productRepository.findByIdAndUserId(id,user.getId()).orElseThrow(
