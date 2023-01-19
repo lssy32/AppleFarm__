@@ -25,9 +25,9 @@ public class InitData implements ApplicationRunner {
 
         User admin = new User("admin", passwordEncoder.encode("admin"), "admin","admin",UserRoleEnum.ADMIN);
         User seller = new User("seller", passwordEncoder.encode("seller"), "seller", "seller",UserRoleEnum.SELLER, "sellerNickname");
-        User seller1 = new User("seller1", passwordEncoder.encode("seller"), "seller", "seller",UserRoleEnum.SELLER, "sellerNickname1");
+        User seller1 = new User("seller1", passwordEncoder.encode("seller"), "seller1", "seller",UserRoleEnum.SELLER, "sellerNickname1");
         User customer = new User("customer", passwordEncoder.encode("customer"), "customer", "customer",UserRoleEnum.CUSTOMER);
-        User customer1 = new User("customer1", passwordEncoder.encode("customer"), "customer", "customer",UserRoleEnum.CUSTOMER);
+        User customer1 = new User("customer1", passwordEncoder.encode("customer"), "customer1", "customer",UserRoleEnum.CUSTOMER);
         userRepository.save(admin);
         userRepository.save(seller);
         userRepository.save(seller1);

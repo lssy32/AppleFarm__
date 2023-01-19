@@ -6,12 +6,8 @@ import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
-import com.example.applefarm_.registration.entity.Registration;
-import com.example.applefarm_.registration.repository.RegistrationRepository;
 import com.example.applefarm_.security.jwt.JwtUtil;
 import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
-import com.example.applefarm_.seller.entitiy.SellerProfile;
-import com.example.applefarm_.seller.repository.SellerRepository;
 import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
@@ -31,7 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.relation.Role;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -39,7 +34,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.example.applefarm_.user.entitiy.UserRoleEnum.CUSTOMER;
 import static com.example.applefarm_.user.entitiy.UserRoleEnum.SELLER;
 
 @Service
@@ -76,7 +70,7 @@ public class UserServiceImpl implements UserService {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
         User user = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
+                () -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
         if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
             throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
@@ -119,9 +113,9 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserProfileResponseDto editUserProfile(UserProfileRequestDto userProfileRequestDto, Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
+                () -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
-        user.update(userProfileRequestDto);
+        user.updateUserProfile(userProfileRequestDto);
         userRepository.save(user);
         return new UserProfileResponseDto(user);
     }
