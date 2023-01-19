@@ -3,12 +3,12 @@ package com.example.applefarm_.admin.service;
 
 import com.example.applefarm_.exception.CustomException;
 import com.example.applefarm_.exception.ExceptionStatus;
+import com.example.applefarm_.product.repository.ProductRepository;
 import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.registration.entity.Registration;
 import com.example.applefarm_.registration.repository.RegistrationRepository;
 import com.example.applefarm_.user.dto.UserResponseDto;
 import com.example.applefarm_.user.entitiy.User;
-import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import com.example.applefarm_.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +32,7 @@ public class AdminServiceImpl implements AdminService {
 
     private final UserRepository userRepository;
     private final RegistrationRepository registrationRepository;
+    private final ProductRepository productRepository;
 
 
     @Override
@@ -58,9 +59,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional
-    public void modifideroleCustomer(Long id) throws IllegalArgumentException {
+    public void modifiedRoleCustomer(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
-                () ->  new CustomException(ExceptionStatus.DOESN_NOT_USER)
+                () ->  new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
         if(user.getRole() == CUSTOMER){
             Registration registration = registrationRepository.findByUserId(id).orElseThrow(
@@ -73,12 +74,13 @@ public class AdminServiceImpl implements AdminService {
     }
     @Override
     @Transactional
-    public void modifideroleSeller(Long id) throws IllegalArgumentException {
+    public void modifiedRoleSeller(Long id) throws IllegalArgumentException {
         User user = userRepository.findById(id).orElseThrow(
-                () ->  new CustomException(ExceptionStatus.DOESN_NOT_USER)
+                () ->  new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
         );
         if(user.getRole() == SELLER){
             user.changeCustomerBySeller();
+            productRepository.deleteAllBySellerId(user.getId());
         }else {throw new CustomException(ExceptionStatus.NOT_SELLER);}
     }
 

@@ -5,7 +5,6 @@ import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,13 +27,13 @@ public class AdminController {
     }
 
     @PutMapping("/modifideroleCustomer/{id}")
-    public void modifideroleCustomer(@PathVariable Long id){
-        adminService.modifideroleCustomer(id);
+    public void modifiedRoleCustomer(@PathVariable Long id){
+        adminService.modifiedRoleCustomer(id);
     }
 
     @PutMapping("/modifideroleSeller/{id}")
-    public void modifideroleSeller(@PathVariable Long id){
-        adminService.modifideroleSeller(id);
+    public void modifiedRoleSeller(@PathVariable Long id){
+        adminService.modifiedRoleSeller(id);
     }
 
     @GetMapping("/regists")
