@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity getProductList(int page, int size){
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page-1, size);
         Page<Product> products = productRepository.findAll(pageable);
         List<ProductResponse> productReponseDtoList = products.stream().map(product -> new ProductResponse(product)).collect(Collectors.toList());
         return new ResponseEntity<>(productReponseDtoList, HttpStatus.OK);
@@ -133,5 +134,27 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.expireToken(user.getLoginId(), user.getRole()));
+    }
+
+    @Transactional
+    public List<ProductResponse> getProductsByKeyword(String keyword, int page) {
+        Page<Product> products = productRepository.findAllByProductNameContaining(keyword, pageableSetting(page));
+        List<ProductResponse> productResponseList = products.stream().map(ProductResponse::new).collect(Collectors.toList());
+        return productResponseList;
+    }
+
+    @Transactional
+    public List<ProductResponse> getProductsByNickname(String nickname, int page) {
+        Long id = userRepository.findBySellerNickname(nickname).getId();
+        Page<Product> products = productRepository.findAllBySellerId(id, pageableSetting(page));
+        List<ProductResponse> productResponseList = products.stream().map(ProductResponse::new).collect(Collectors.toList());
+        return productResponseList;
+    }
+
+    private Pageable pageableSetting(int pageChoice) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction,"id");
+        Pageable pageable = PageRequest.of(pageChoice-1,4,sort)   ;
+        return pageable;
     }
 }

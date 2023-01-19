@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.controller;
 
+import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.user.dto.UserOrderDto;
 import com.example.applefarm_.user.dto.SellerRegistrationDto;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,4 +72,14 @@ public class UserController {
         return "signout";
     }
 
+
+    @GetMapping("/keyword")
+    public List<ProductResponse> getProductByKeyword(@RequestParam String keyword, @RequestParam int page) {
+        return userService.getProductsByKeyword(keyword, page);
+    }
+
+    @GetMapping("/nickname")
+    public List<ProductResponse> getProductByNickname(@RequestParam String nickname, @RequestParam int page) {
+        return userService.getProductsByNickname(nickname, page);
+    }
 }
