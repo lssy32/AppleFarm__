@@ -121,5 +121,17 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return new UserProfileResponseDto(user);
     }
-
+    @Override
+    @Transactional
+    public void signout(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        String loginId = loginRequestDto.getLoginId();
+        // 사용자 확인
+        User user = userRepository.findByLoginId(loginId).orElseThrow(
+                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
+        );
+        if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
+            throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
+        }
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.expireToken(user.getLoginId(), user.getRole()));
+    }
 }

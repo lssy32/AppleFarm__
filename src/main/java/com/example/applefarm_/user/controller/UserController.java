@@ -8,6 +8,7 @@ import com.example.applefarm_.user.dto.LoginRequestDto;
 import com.example.applefarm_.user.dto.SignupRequestDto;
 import com.example.applefarm_.user.dto.UserProfileRequestDto;
 import com.example.applefarm_.user.dto.UserProfileResponseDto;
+import com.example.applefarm_.user.service.UserService;
 import com.example.applefarm_.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,18 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserServiceImpl userServiceImpl;
+    private final UserService userService;
 
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequestDto signupRequestDto) {
-        userService.signup(signupRequestDto);
-        return "success";
+        userServiceImpl.signup(signupRequestDto);
+        return "signup";
     }
 
     @PostMapping("/signin")
     public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userService.signin(loginRequestDto, response);
+        userServiceImpl.signin(loginRequestDto, response);
     }
 
     @GetMapping("/customer/profile")
@@ -60,6 +62,12 @@ public class UserController {
     public UserProfileResponseDto editUserProfile (@RequestBody UserProfileRequestDto
     userProfileRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return userService.editUserProfile(userProfileRequestDto, userDetails.getUser().getId());
+    }
+
+    @PostMapping("/signout")
+    public String signout(@RequestBody LoginRequestDto loginRequestDto,HttpServletResponse response) {
+        userServiceImpl.signout(loginRequestDto,response);
+        return "signout";
     }
 
 }
