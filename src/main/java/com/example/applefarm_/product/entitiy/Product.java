@@ -39,6 +39,16 @@ public class Product {
     @Column(nullable = false, name = "product_category")
     private Long productCategory;
 
+    public Product(Long sellerId, String productName, int productPrice, int productQuantity, String productImage, String productDetail, Long productCategory) {
+        this.sellerId = sellerId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+        this.productImage = productImage;
+        this.productDetail = productDetail;
+        this.productCategory = productCategory;
+    }
+
     public Product(ProductRequest request, User seller) {
         this.sellerId = seller.getId();
         this.productName = request.getProductName();
