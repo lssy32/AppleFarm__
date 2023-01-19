@@ -19,6 +19,7 @@ import com.example.applefarm_.user.dto.UserProfileResponseDto;
 import com.example.applefarm_.user.entitiy.User;
 import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import com.example.applefarm_.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.management.relation.Role;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,16 +127,9 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     @Transactional
-    public void signout(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        String loginId = loginRequestDto.getLoginId();
-        // 사용자 확인
-        User user = userRepository.findByLoginId(loginId).orElseThrow(
-                () -> new CustomException(ExceptionStatus.DOESN_NOT_USER)
-        );
-        if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
-            throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
-        }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.expireToken(user.getLoginId(), user.getRole()));
+    public void signout(HttpServletRequest request) {
+        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request)).setExpiration(new Date());
+        jwtUtil.deleteAuthentication(claims.getSubject());
     }
 
     @Transactional

@@ -25,18 +25,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
     private final UserService userService;
 
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequestDto signupRequestDto) {
-        userServiceImpl.signup(signupRequestDto);
+        userService.signup(signupRequestDto);
         return "signup";
     }
 
     @PostMapping("/signin")
     public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userServiceImpl.signin(loginRequestDto, response);
+        userService.signin(loginRequestDto, response);
     }
 
     @GetMapping("/customer/profile")
@@ -67,8 +66,8 @@ public class UserController {
     }
 
     @PostMapping("/signout")
-    public String signout(@RequestBody LoginRequestDto loginRequestDto,HttpServletResponse response) {
-        userServiceImpl.signout(loginRequestDto,response);
+    public String signout(HttpServletRequest request) {
+        userService.signout(request);
         return "signout";
     }
 
