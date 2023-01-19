@@ -43,6 +43,15 @@ public class User extends Timestamp {
         this.role = role;
     }
 
+    public User(String loginId, String loginPassword, String nickName, String image, UserRoleEnum role, String sellerNickname) {
+        this.loginId = loginId;
+        this.loginPassword = loginPassword;
+        this.nickName = nickName;
+        this.image = image;
+        this.role = role;
+        this.sellerNickname = sellerNickname;
+    }
+
     public void changeSellerByCustomer(Registration registration){  // 커스터머 > 셀러
         this.role = UserRoleEnum.SELLER;
         this.sellerNickname = registration.getSellerNickname();
