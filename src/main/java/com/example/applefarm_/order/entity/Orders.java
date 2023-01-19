@@ -24,20 +24,20 @@ public class Orders {
     private Long productId;
     private int quantity;
 
-    //논리삭제를 위한 필드
-    private int isDeleted;
+    // enum 으로 바꿔야되는뎃..
+    private OrderStatus orderStatus;
 
-    public Orders(Product product, Long customerId, int quantity) {
-        this.sellerId = product.getSellerId();
+    public Orders(Long sellerId,Long productId, Long customerId, int quantity) {
+        this.sellerId = sellerId;
         this.customerId = customerId;
-        this.productId = product.getId();
+        this.productId = productId;
         this.quantity = quantity;
-        this.isDeleted = 0;
+        this.orderStatus = OrderStatus.WAITING;
     }
 
     public void orderCompletionProcessing(){
-        if(this.isDeleted == 1) throw new CustomException(ExceptionStatus.Already_IS_DELETED);
-        this.isDeleted = 1;
+        if(this.orderStatus == OrderStatus.COMPLETION) throw new CustomException(ExceptionStatus.Already_IS_COMPLETION);
+        this.orderStatus = OrderStatus.COMPLETION;
     }
 
     public void validateSellerId(Long sellerId){

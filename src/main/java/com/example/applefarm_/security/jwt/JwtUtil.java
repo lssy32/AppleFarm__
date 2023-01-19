@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -65,17 +67,6 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm)
                         .compact();
     }
-    public String expireToken(String username, UserRoleEnum role) {
-        Date date = new Date();
-        return BEARER_PREFIX +
-                Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_KEY, role)
-                        .setExpiration(new Date(date.getTime()))
-                        .setIssuedAt(date)
-                        .signWith(key, signatureAlgorithm)
-                        .compact();
-    }
 
     // 토큰 검증
     public boolean validateToken(String token) {
@@ -100,4 +91,12 @@ public class JwtUtil {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
+    public void deleteAuthentication(String loginId) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication =new UsernamePasswordAuthenticationToken(userDetails, null, null);
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+    }
+
 }

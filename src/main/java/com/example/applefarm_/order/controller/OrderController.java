@@ -33,7 +33,7 @@ public class OrderController {
     @PutMapping("sellers/orders/{orderId}")
     public ResponseEntity<String> orderCompletionProcessing(@PathVariable Long orderId,
                                                             @AuthenticationPrincipal UserDetailsImpl userDetails){
-        orderService.orderCompletionProcessing(orderId, userDetails.getUser());
+        orderService.orderCompletionProcessing(orderId, userDetails.getUser().getId());
         return new ResponseEntity<>("주문요청 처리완료", HttpStatus.OK);
     }
 

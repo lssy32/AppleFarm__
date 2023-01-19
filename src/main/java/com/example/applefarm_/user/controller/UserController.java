@@ -1,5 +1,6 @@
 package com.example.applefarm_.user.controller;
 
+import com.example.applefarm_.product.dto.ProductResponse;
 import com.example.applefarm_.seller.dto.SellerProfileResponseDto;
 import com.example.applefarm_.user.dto.UserOrderDto;
 import com.example.applefarm_.user.dto.SellerRegistrationDto;
@@ -18,23 +19,23 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
     private final UserService userService;
 
     @PostMapping("/signup")
     public String signup(@RequestBody SignupRequestDto signupRequestDto) {
-        userServiceImpl.signup(signupRequestDto);
+        userService.signup(signupRequestDto);
         return "signup";
     }
 
     @PostMapping("/signin")
     public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userServiceImpl.signin(loginRequestDto, response);
+        userService.signin(loginRequestDto, response);
     }
 
     @GetMapping("/customer/profile")
@@ -65,9 +66,19 @@ public class UserController {
     }
 
     @PostMapping("/signout")
-    public String signout(@RequestBody LoginRequestDto loginRequestDto,HttpServletResponse response) {
-        userServiceImpl.signout(loginRequestDto,response);
+    public String signout(HttpServletRequest request) {
+        userService.signout(request);
         return "signout";
     }
 
+
+    @GetMapping("/keyword")
+    public List<ProductResponse> getProductByKeyword(@RequestParam String keyword, @RequestParam int page) {
+        return userService.getProductsByKeyword(keyword, page);
+    }
+
+    @GetMapping("/nickname")
+    public List<ProductResponse> getProductByNickname(@RequestParam String nickname, @RequestParam int page) {
+        return userService.getProductsByNickname(nickname, page);
+    }
 }
