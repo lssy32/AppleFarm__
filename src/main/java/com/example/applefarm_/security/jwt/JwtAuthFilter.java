@@ -35,7 +35,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if(context.getAuthentication().getName().equals(info.getSubject())){
                 jwtUtil.setAuthentication(info.getSubject(),request);}
         } else {
-            throw new IllegalArgumentException("로그인을 다시 시도 해주세요.");
+            throw new IllegalArgumentException("로그인을 다시 시도해 주세요.");
         }
         }filterChain.doFilter(request,response);
     }
