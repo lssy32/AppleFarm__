@@ -29,8 +29,13 @@ public class ProductService {
 
     @Transactional
     public ProductResponse saveProduct(ProductRequest request, Long sellerId) {
-        Product product = productRepository.save(new Product(request,sellerId));
+        Product product = productRepository.save(request.toEntity(sellerId));
         return new ProductResponse(product);
+    }
+    public Product reduceQuantity (Long productid, int orderQauntity){
+        Product product = productRepository.findById(productid).get();
+        product.subtractQuantity(orderQauntity);
+        return product;
     }
 
     @Transactional

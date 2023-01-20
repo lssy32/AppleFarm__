@@ -9,6 +9,7 @@ import com.example.applefarm_.order.entity.Orders;
 import com.example.applefarm_.order.repository.OrderRepository;
 import com.example.applefarm_.product.entitiy.Product;
 import com.example.applefarm_.product.repository.ProductRepository;
+import com.example.applefarm_.product.service.ProductService;
 import com.example.applefarm_.user.entitiy.User;
 import com.example.applefarm_.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +29,20 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ProductService productService;
 
     @Transactional
     public void order(OrderRequestDto orderRequestDto, Long customerId) {
-        Product product = productRepository.findById(orderRequestDto.getProductId())
-                .orElseThrow(() -> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST));
+//        Product product = productRepository.findById(orderRequestDto.getProductId())
+//                .orElseThrow(() -> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST));
         User customer = userRepository.findById(customerId)
                 .orElseThrow(() -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
         // 주문시 고객이 결제.
+        Product product = productService.reduceQuantity(orderRequestDto.getProductId(), orderRequestDto.getQuantity());
+
         customer.payForOrder(product.getProductPrice(), orderRequestDto.getQuantity());
-        product.subtractQuantity(orderRequestDto.getQuantity());
+//        product.subtractQuantity(orderRequestDto.getQuantity());
+
         Orders order = new Orders(product.getSellerId(), product.getId(), customerId, orderRequestDto.getQuantity());
         orderRepository.save(order);
         userRepository.save(customer);

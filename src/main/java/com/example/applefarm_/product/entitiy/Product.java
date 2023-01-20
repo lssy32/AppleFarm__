@@ -59,7 +59,6 @@ public class Product {
         this.productImage = request.getProductImage();
         this.productDetail = request.getProductDetail();
         this.productCategory= request.getProductCategory();
-
     }
 
     public void updateProduct(ProductRequest request) {
