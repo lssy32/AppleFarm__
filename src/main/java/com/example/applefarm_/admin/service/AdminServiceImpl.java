@@ -38,7 +38,8 @@ public class AdminServiceImpl implements AdminService {
     @Override
     @Transactional
     public List<UserResponseDto> findCustomerList(int pageChoice) throws IllegalArgumentException {
-        Page<User> users = userRepository.findAllByRole(CUSTOMER, pageableSetting(pageChoice));
+        Pageable pageable = PageRequest.of(pageChoice-1,4, Sort.Direction.DESC, "id");
+        Page<User> users = userRepository.findAllByRole(CUSTOMER, pageable);
         List<UserResponseDto> customerResult = users.stream().map(UserResponseDto::new).collect(Collectors.toList());
         return customerResult;
     }
@@ -51,22 +52,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     private Pageable pageableSetting(int pageChoice) {
-        Sort.Direction direction = Sort.Direction.DESC;
-        Sort sort = Sort.by(direction,"id");
-        Pageable pageable = PageRequest.of(pageChoice-1,4,sort);
+        Pageable pageable = PageRequest.of(pageChoice-1,4, Sort.Direction.DESC, "id");
         return pageable;
     }
 
     @Override
     @Transactional
     public void modifiedRoleCustomer(Long id) throws IllegalArgumentException {
-        User user = userRepository.findById(id).orElseThrow(
-                () ->  new CustomException(ExceptionStatus.USER_IS_NOT_EXIST)
-        );
+        User user = userRepository.findById(id).orElseThrow(() ->  new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
         if(user.getRole() == CUSTOMER){
             Registration registration = registrationRepository.findByUserId(id).orElseThrow(
-                    () -> new CustomException(ExceptionStatus.REQURES_IS_EMPTY)
-            );
+                    () -> new CustomException(ExceptionStatus.REQURES_IS_EMPTY));
             user.changeSellerByCustomer(registration);
         }else {
             throw new CustomException(ExceptionStatus.NOT_CUSTOMER);

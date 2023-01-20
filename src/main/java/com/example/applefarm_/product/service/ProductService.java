@@ -28,11 +28,10 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional
-    public ProductResponse saveProduct(ProductRequest request, User seller) {
-        Product product = productRepository.save(new Product(request,seller));
+    public ProductResponse saveProduct(ProductRequest request, Long sellerId) {
+        Product product = productRepository.save(new Product(request,sellerId));
         return new ProductResponse(product);
     }
-
 
     @Transactional
     public List<ProductResponse> getProducts(int pageChoice, User user) {

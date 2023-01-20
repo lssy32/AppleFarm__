@@ -95,4 +95,8 @@ public class User extends Timestamp {
     public void refundPayment(int quantity, int productPrice) {
         this.points += productPrice * quantity;
     }
+
+    public boolean isVaildateRole(UserRoleEnum seller) {
+        return this.role.equals(seller);
+    }
 }

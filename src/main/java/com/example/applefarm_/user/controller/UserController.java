@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public void signin(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) {
         userService.signin(loginRequestDto, response);
     }
 

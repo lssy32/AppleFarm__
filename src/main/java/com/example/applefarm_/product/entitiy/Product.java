@@ -51,8 +51,8 @@ public class Product {
         this.productCategory = productCategory;
     }
 
-    public Product(ProductRequest request, User seller) {
-        this.sellerId = seller.getId();
+    public Product(ProductRequest request, Long sellerId) {
+        this.sellerId = sellerId;
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();

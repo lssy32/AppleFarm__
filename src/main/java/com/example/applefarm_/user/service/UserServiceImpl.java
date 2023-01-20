@@ -52,8 +52,7 @@ public class UserServiceImpl implements UserService {
         String loginId = signupRequestDto.getLoginId();
         String loginPassword = passwordEncoder.encode(signupRequestDto.getLoginPassword());
         // 회원 중복 확인
-        Optional<User> found = userRepository.findByLoginId(loginId);
-        if (found.isPresent()) {
+        if (userRepository.findByLoginId(loginId).isPresent()) {
             throw new CustomException(ExceptionStatus.UserId_IS_EXIST);
         }
         String nickName = signupRequestDto.getNickName();
@@ -102,11 +101,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new CustomException(ExceptionStatus.SELLER_INFORMATION_IS_EMPTY)
         );
-        if(user.getRole().compareTo(SELLER)!=0){
+        if(!user.isVaildateRole(SELLER)){
             throw new CustomException(ExceptionStatus.NOT_SELLER);
         }
-        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(user);
-        return sellerProfileResponseDto;
+        return new SellerProfileResponseDto(user);
     }
 
     @Override

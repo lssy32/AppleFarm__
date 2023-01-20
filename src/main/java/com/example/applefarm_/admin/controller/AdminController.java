@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
+// admin -> admins로 바꾸는게 REST 합니다.
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     private final AdminServiceImpl adminService;
@@ -26,17 +27,17 @@ public class AdminController {
         return adminService.findSellerList(pageChoice);
     }
 
-    @PutMapping("/modifideroleCustomer/{id}")
+    @PutMapping("/modifiedRoleCustomer/{id}")
     public void modifiedRoleCustomer(@PathVariable Long id){
         adminService.modifiedRoleCustomer(id);
     }
 
-    @PutMapping("/modifideroleSeller/{id}")
+    @PutMapping("/modifiedRoleSeller/{id}")
     public void modifiedRoleSeller(@PathVariable Long id){
         adminService.modifiedRoleSeller(id);
     }
 
-    @GetMapping("/regists")
+    @GetMapping("/registrations")
     public List<RegistrationResponseDto> findRegistrationList() {
         return adminService.findRegistrationList();
     }
