@@ -34,7 +34,7 @@ public class InitData implements ApplicationRunner {
         userRepository.save(customer);
         userRepository.save(customer1);
         Product product = new Product(3L, "macbook", 20000, 50, "www.naver.com", "Macbook is good", 1L);
-        Product product1 = new Product(2L, "mac", 30000, 50, "www.google.com", "Mac is good", 1L);
+        Product product1 = new Product(2L, "mac", 30000, 1, "www.google.com", "Mac is good", 1L);
         Product product2 = new Product(2L, "iPhone", 40000, 50, "www.daum.net", "iPhone is good", 2L);
         productRepository.save(product);
         productRepository.save(product1);

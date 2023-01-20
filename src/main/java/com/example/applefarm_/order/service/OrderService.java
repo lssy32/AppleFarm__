@@ -43,25 +43,31 @@ public class OrderService {
         userRepository.save(customer);
         productRepository.save(product);
     }
-
-    public List<OrderResponseDto> getMyOrders(int pageChoice, User seller) {
-        // 완료 처리가 된 애들도 같이 불러와지는 이슈 -> where절 활용해서 0인 애들만 불러오도록 고민해볼 것. -> 해결 될지도?
-        Page<Orders> orders = orderRepository.findAllBySellerIdAndOrderStatus(seller.getId(), OrderStatus.WAITING, pageableSetting(pageChoice));
+    @Transactional
+    public List<OrderResponseDto> getMyOrders(int pageChoice, Long sellerId) {
+        Page<Orders> orders = orderRepository.findAllBySellerId(sellerId, pageableSetting(pageChoice));
         if (orders.isEmpty()) throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         List<OrderResponseDto> orderResponseDtoList = orders.stream().map(OrderResponseDto::new).collect(Collectors.toList());
         return orderResponseDtoList;
     }
 
+    public List<OrderResponseDto> getMyWaitingOrders(int pageChoice, Long sellerId) {
+        Page<Orders> orders = orderRepository.findAllBySellerIdAndOrderStatus(sellerId, OrderStatus.WAITING, pageableSetting(pageChoice));
+        if (orders.isEmpty()) throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
+        List<OrderResponseDto> orderResponseDtoList = orders.stream().map(OrderResponseDto::new).collect(Collectors.toList());
+        return orderResponseDtoList;
+    }
+    @Transactional
     public Pageable pageableSetting(int pageChoice) {
         Sort.Direction direction = Sort.Direction.DESC;
         Sort sort = Sort.by(direction, "id");
         Pageable pageable = PageRequest.of(pageChoice - 1, 10, sort);
         return pageable;
     }
-
+    @Transactional
     public void orderCompletionProcessing(Long orderId, Long sellerId) {
         Orders order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ExceptionStatus.Order_IS_NOT_EXIST));
-        User seller = userRepository.findById(sellerId).orElseThrow(()-> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
+        User seller = userRepository.findById(sellerId).orElseThrow(() -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
         Product product = productRepository.findById(order.getProductId()).orElseThrow(() -> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST));
         order.validateSellerId(sellerId);
         order.orderCompletionProcessing();
@@ -69,4 +75,18 @@ public class OrderService {
         orderRepository.save(order);
         userRepository.save(seller);
     }
+    @Transactional
+    public void orderCancelingProcessing(Long orderId, Long sellerId) {
+        Orders order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ExceptionStatus.Order_IS_NOT_EXIST));
+        User customer = userRepository.findById(order.getCustomerId()).orElseThrow(() -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
+        Product product = productRepository.findById(order.getProductId()).orElseThrow(() -> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST));
+        order.validateSellerId(sellerId);
+        order.orderCancelingProcessing();
+        customer.refundPayment(order.getQuantity(), product.getProductPrice());
+        product.putQuantityBack(order.getQuantity());
+        orderRepository.save(order);
+        userRepository.save(customer);
+        productRepository.save(product);
+    }
+
 }

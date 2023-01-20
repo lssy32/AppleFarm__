@@ -44,30 +44,31 @@ public class User extends Timestamp {
         this.nickName = nickName;
         this.image = image;
         this.role = role;
-        this.points =  100000;
+        this.points = 100000;
     }
+
     public User(String loginId, String loginPassword, String nickName, String image, UserRoleEnum role, String sellerNickname) {
         this.loginId = loginId;
         this.loginPassword = loginPassword;
         this.nickName = nickName;
         this.image = image;
         this.role = role;
-        this.points =  100000;
+        this.points = 100000;
         this.sellerNickname = sellerNickname;
     }
 
 
-    public void changeSellerByCustomer(Registration registration){  // 커스터머 > 셀러
+    public void changeSellerByCustomer(Registration registration) {  // 커스터머 > 셀러
         this.role = UserRoleEnum.SELLER;
         this.sellerNickname = registration.getSellerNickname();
         this.sellerImage = registration.getSellerImage();
         this.sellerDetails = registration.getSellerDetail();
         this.sellerCategory = registration.getCategory();
     }
-    public void changeCustomerBySeller(){ // 셀러 > 커스터머
+
+    public void changeCustomerBySeller() { // 셀러 > 커스터머
         this.role = UserRoleEnum.CUSTOMER;
     }
-
 
 
     public void updateUserProfile(UserProfileRequestDto userProfileRequestDto) {
@@ -83,11 +84,15 @@ public class User extends Timestamp {
     }
 
     public void payForOrder(int productPrice, int productQuantity) {
-        this.points -= productPrice*productQuantity;
-        if(this.points < 0) throw new CustomException(ExceptionStatus.Points_IS_LACKING);
+        this.points -= productPrice * productQuantity;
+        if (this.points < 0) throw new CustomException(ExceptionStatus.Points_IS_LACKING);
     }
 
     public void receivePayment(int quantity, int productPrice) {
-        this.points += productPrice*quantity;
+        this.points += productPrice * quantity;
+    }
+
+    public void refundPayment(int quantity, int productPrice) {
+        this.points += productPrice * quantity;
     }
 }

@@ -75,4 +75,8 @@ public class Product {
         this.productQuantity -= quantity;
         if(this.productQuantity < 0) throw new CustomException(ExceptionStatus.Quantity_IS_LACKING);
     }
+
+    public void putQuantityBack(int quantity) {
+        this.productQuantity += quantity;
+    }
 }
