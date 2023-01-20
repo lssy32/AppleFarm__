@@ -34,8 +34,8 @@ public class UserController {
     }
 
     @PostMapping("/signin")
-    public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userService.signin(loginRequestDto, response);
+    public void signin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response,HttpServletRequest request) {
+        userService.signin(loginRequestDto, response,request);
     }
 
     @GetMapping("/customer/profile")

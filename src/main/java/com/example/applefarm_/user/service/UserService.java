@@ -17,7 +17,7 @@ public interface UserService {
     void signup(SignupRequestDto signupRequestDto);
 
 
-    void signin(LoginRequestDto loginRequestDto, HttpServletResponse response);
+    void signin(LoginRequestDto loginRequestDto, HttpServletResponse response,HttpServletRequest request);
 
     SellerProfileResponseDto getSellerProfile(Long id);
 

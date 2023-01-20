@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response,HttpServletRequest request) {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
         User user = userRepository.findByLoginId(loginId).orElseThrow(
@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
             throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
         }
+        jwtUtil.setAuthentication(user.getLoginId(),request);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getLoginId(), user.getRole()));
     }
 
@@ -128,8 +129,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void signout(HttpServletRequest request) {
-        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request)).setExpiration(new Date());
-        jwtUtil.deleteAuthentication(claims.getSubject());
+        HttpSession session = request.getSession(false);
+        session.setAttribute("SECURITY_CONTEXT",null);
     }
 
     @Transactional
