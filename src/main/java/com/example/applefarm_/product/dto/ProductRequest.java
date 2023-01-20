@@ -18,5 +18,14 @@ public class ProductRequest {
         Product product = new Product();
         // 그래서 여기서 빌더를 쓴다.
     }
+    //TODO : Ref builder 참고용
+//    public Member toEntity(String password){
+//        return Member.builder()
+//                .username(this.getUsername())
+//                .name(this.getName())
+//                .nickName(this.getNickName())
+//                .password(password)
+//                .build();
+//    }
 
 }
