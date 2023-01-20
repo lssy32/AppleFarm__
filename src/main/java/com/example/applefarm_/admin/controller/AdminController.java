@@ -5,7 +5,6 @@ import com.example.applefarm_.registration.dto.RegistrationResponseDto;
 import com.example.applefarm_.user.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
+// admin -> admins로 바꾸는게 REST 합니다.
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
     private final AdminServiceImpl adminService;
@@ -27,17 +27,17 @@ public class AdminController {
         return adminService.findSellerList(pageChoice);
     }
 
-    @PutMapping("/modifideroleCustomer/{id}")
-    public void modifideroleCustomer(@PathVariable Long id){
-        adminService.modifideroleCustomer(id);
+    @PutMapping("/modifiedRoleCustomer/{id}")
+    public void modifiedRoleCustomer(@PathVariable Long id){
+        adminService.modifiedRoleCustomer(id);
     }
 
-    @PutMapping("/modifideroleSeller/{id}")
-    public void modifideroleSeller(@PathVariable Long id){
-        adminService.modifideroleSeller(id);
+    @PutMapping("/modifiedRoleSeller/{id}")
+    public void modifiedRoleSeller(@PathVariable Long id){
+        adminService.modifiedRoleSeller(id);
     }
 
-    @GetMapping("/regists")
+    @GetMapping("/registrations")
     public List<RegistrationResponseDto> findRegistrationList() {
         return adminService.findRegistrationList();
     }

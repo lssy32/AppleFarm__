@@ -2,15 +2,11 @@ package com.example.applefarm_.order.entity;
 
 import com.example.applefarm_.exception.CustomException;
 import com.example.applefarm_.exception.ExceptionStatus;
-import com.example.applefarm_.product.entitiy.Product;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,24 +19,32 @@ public class Orders {
     private Long customerId;
     private Long productId;
     private int quantity;
+    @Enumerated(value = EnumType.STRING)
+    private OrderStatus orderStatus;
 
-    //논리삭제를 위한 필드
-    private int isDeleted;
-
-    public Orders(Product product, Long customerId, int quantity) {
-        this.sellerId = product.getSellerId();
+    public Orders(Long sellerId,Long productId, Long customerId, int quantity) {
+        this.sellerId = sellerId;
         this.customerId = customerId;
-        this.productId = product.getId();
+        this.productId = productId;
         this.quantity = quantity;
-        this.isDeleted = 0;
+        this.orderStatus = OrderStatus.WAITING;
     }
 
     public void orderCompletionProcessing(){
-        if(this.isDeleted == 1) throw new CustomException(ExceptionStatus.Already_IS_DELETED);
-        this.isDeleted = 1;
+        if(this.orderStatus == OrderStatus.COMPLETION) throw new CustomException(ExceptionStatus.Already_IS_COMPLETION);
+        if(this.orderStatus == OrderStatus.CANCELING) throw new CustomException(ExceptionStatus.Already_IS_CANCEL);
+        this.orderStatus = OrderStatus.COMPLETION;
+    }
+
+    public void orderCancelingProcessing() {
+        if(this.orderStatus == OrderStatus.CANCELING) throw new CustomException(ExceptionStatus.Already_IS_CANCEL);
+        if(this.orderStatus == OrderStatus.COMPLETION) throw new CustomException(ExceptionStatus.Already_IS_COMPLETION);
+
+        this.orderStatus = OrderStatus.CANCELING;
     }
 
     public void validateSellerId(Long sellerId){
         if(!this.sellerId.equals(sellerId)) throw new IllegalArgumentException("판매자 불일치");
     }
+
 }

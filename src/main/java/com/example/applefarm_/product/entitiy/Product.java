@@ -1,5 +1,7 @@
 package com.example.applefarm_.product.entitiy;
 
+import com.example.applefarm_.exception.CustomException;
+import com.example.applefarm_.exception.ExceptionStatus;
 import com.example.applefarm_.product.dto.ProductRequest;
 import com.example.applefarm_.user.entitiy.User;
 import lombok.Getter;
@@ -49,8 +51,8 @@ public class Product {
         this.productCategory = productCategory;
     }
 
-    public Product(ProductRequest request, User seller) {
-        this.sellerId = seller.getId();
+    public Product(ProductRequest request, Long sellerId) {
+        this.sellerId = sellerId;
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();
@@ -67,5 +69,14 @@ public class Product {
         this.productImage = request.getProductImage();
         this.productDetail = request.getProductDetail();
         this.productCategory= request.getProductCategory();
+    }
+
+    public void subtractQuantity(int quantity) {
+        this.productQuantity -= quantity;
+        if(this.productQuantity < 0) throw new CustomException(ExceptionStatus.Quantity_IS_LACKING);
+    }
+
+    public void putQuantityBack(int quantity) {
+        this.productQuantity += quantity;
     }
 }

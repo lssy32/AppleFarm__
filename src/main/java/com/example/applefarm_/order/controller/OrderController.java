@@ -19,22 +19,36 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("users/orders")
-    public ResponseEntity<String> order (@RequestBody OrderRequestDto orderRequestDto,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> order(@RequestBody OrderRequestDto orderRequestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         orderService.order(orderRequestDto, userDetails.getUser().getId());
         return new ResponseEntity<>("주문 완료", HttpStatus.CREATED);
     }
+
     @GetMapping("sellers/orders/{pageChoice}")
-    public List<OrderResponseDto> getMyOrders (@PathVariable int pageChoice,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return orderService.getMyOrders(pageChoice, userDetails.getUser());
+    public List<OrderResponseDto> getMyOrders(@PathVariable int pageChoice,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return orderService.getMyOrders(pageChoice, userDetails.getUser().getId());
     }
 
-    @PutMapping("sellers/orders/{orderId}")
+    @GetMapping("sellers/orders/waiting/{pageChoice}")
+    public List<OrderResponseDto> getMyWaitingOrders(@PathVariable int pageChoice,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return orderService.getMyWaitingOrders(pageChoice, userDetails.getUser().getId());
+    }
+
+
+    @PutMapping("sellers/orders/complete/{orderId}")
     public ResponseEntity<String> orderCompletionProcessing(@PathVariable Long orderId,
-                                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        orderService.orderCompletionProcessing(orderId, userDetails.getUser());
-        return new ResponseEntity<>("주문요청 처리완료", HttpStatus.OK);
+                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        orderService.orderCompletionProcessing(orderId, userDetails.getUser().getId());
+        return new ResponseEntity<>("오더 수락완료", HttpStatus.OK);
     }
 
+    @PutMapping("sellers/orders/cancel/{orderId}")
+    public ResponseEntity<String> orderCancelingProcessing(@PathVariable Long orderId,
+                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        orderService.orderCancelingProcessing(orderId, userDetails.getUser().getId());
+        return new ResponseEntity<>("오더 취소완료", HttpStatus.OK);
+    }
 }
