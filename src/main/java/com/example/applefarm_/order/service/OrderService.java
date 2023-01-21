@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Order;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,8 +83,9 @@ public class OrderService {
     }
     @Transactional
     public void orderCancelingProcessing(Long orderId, Long sellerId) {
-        Orders order = orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ExceptionStatus.Order_IS_NOT_EXIST));
-        User customer = userRepository.findById(order.getCustomerId()).orElseThrow(() -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
+        Orders order = findOrder(orderId);
+        User customer = userRepository.findById(order.getCustomerId())
+                .orElseThrow(() -> new CustomException(ExceptionStatus.USER_IS_NOT_EXIST));
         Product product = productRepository.findById(order.getProductId()).orElseThrow(() -> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST));
         order.validateSellerId(sellerId);
         order.orderCancelingProcessing();
@@ -92,6 +94,10 @@ public class OrderService {
         orderRepository.save(order);
         userRepository.save(customer);
         productRepository.save(product);
+    }
+
+    private Orders findOrder(Long orderId){
+       return orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ExceptionStatus.Order_IS_NOT_EXIST));
     }
 
 }

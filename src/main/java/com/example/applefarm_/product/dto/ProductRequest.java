@@ -15,7 +15,9 @@ public class ProductRequest {
     private Long productCategory;
 
     public Product toEntity(Long sellerId){
-        Product product = new Product();
+        Product product = new Product(
+        );
+        .sellerId(sellerId)
         // 그래서 여기서 빌더를 쓴다.
     }
     //TODO : Ref builder 참고용
