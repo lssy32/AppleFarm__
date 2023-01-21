@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,8 +53,7 @@ public class UserServiceImpl implements UserService {
         String loginId = signupRequestDto.getLoginId();
         String loginPassword = passwordEncoder.encode(signupRequestDto.getLoginPassword());
         // 회원 중복 확인
-        Optional<User> found = userRepository.findByLoginId(loginId);
-        if (found.isPresent()) {
+        if (userRepository.findByLoginId(loginId).isPresent()) {
             throw new CustomException(ExceptionStatus.UserId_IS_EXIST);
         }
         String nickName = signupRequestDto.getNickName();
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+    public void signin(LoginRequestDto loginRequestDto, HttpServletResponse response,HttpServletRequest request) {
         String loginId = loginRequestDto.getLoginId();
         // 사용자 확인
         User user = userRepository.findByLoginId(loginId).orElseThrow(
@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(loginRequestDto.getLoginPassword(), user.getLoginPassword())) {
             throw new CustomException(ExceptionStatus.PASSWORDS_DO_NOT_MATCH);
         }
+        jwtUtil.setAuthentication(user.getLoginId(),request);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getLoginId(), user.getRole()));
     }
 
@@ -102,11 +103,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new CustomException(ExceptionStatus.SELLER_INFORMATION_IS_EMPTY)
         );
-        if(user.getRole().compareTo(SELLER)!=0){
+        if(!user.isVaildateRole(SELLER)){
             throw new CustomException(ExceptionStatus.NOT_SELLER);
         }
-        SellerProfileResponseDto sellerProfileResponseDto = new SellerProfileResponseDto(user);
-        return sellerProfileResponseDto;
+        return new SellerProfileResponseDto(user);
     }
 
     @Override
@@ -122,8 +122,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void signout(HttpServletRequest request) {
-        Claims claims = jwtUtil.getUserInfoFromToken(jwtUtil.resolveToken(request)).setExpiration(new Date());
-        jwtUtil.deleteAuthentication(claims.getSubject());
+        HttpSession session = request.getSession(false);
+        session.setAttribute("SECURITY_CONTEXT",null);
     }
 
     @Transactional

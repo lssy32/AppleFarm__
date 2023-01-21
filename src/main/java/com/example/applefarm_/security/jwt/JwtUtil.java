@@ -1,7 +1,6 @@
 package com.example.applefarm_.security.jwt;
 
 
-
 import com.example.applefarm_.user.entitiy.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
@@ -33,6 +33,7 @@ public class JwtUtil {
     public static final String AUTHORIZATION_KEY = "auth"; // 사용자 권한 키값. 사용자 권한도 토큰안에 넣어주기 때문에 그때 사용하는 키값
     private static final String BEARER_PREFIX = "Bearer "; // Token 식별자
     private static final long TOKEN_TIME = 60 * 60 * 1000L; // 토큰 만료시간. (60 * 1000L 이 1분)
+
 
     @Value("${jwt.secret.key}")
     private String secretKey;
@@ -53,6 +54,16 @@ public class JwtUtil {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    public void setAuthentication(String loginId,HttpServletRequest request) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication = createAuthentication(loginId);
+        context.setAuthentication(authentication);
+        SecurityContextHolder.setContext(context);
+        HttpSession session = request.getSession(true);
+        session.setAttribute("SECURITY_CONTEXT",context);
+        session.setMaxInactiveInterval(1800);
     }
 
     // 토큰 생성
@@ -91,12 +102,6 @@ public class JwtUtil {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
-    public void deleteAuthentication(String loginId) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication =new UsernamePasswordAuthenticationToken(userDetails, null, null);
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-    }
+
 
 }

@@ -5,42 +5,41 @@ import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
-
-        if(token != null) {
-            if(!jwtUtil.validateToken(token)){
+        if(token != null ){
+        if(request.getSession().getAttribute("SECURITY_CONTEXT") != null) {
+            Claims info = jwtUtil.getUserInfoFromToken(token);
+            HttpSession session = request.getSession(false);
+            SecurityContext context = (SecurityContext) session.getAttribute("SECURITY_CONTEXT");
+            if(!jwtUtil.validateToken(token)) {
                 jwtExceptionHandler(response, "Token Error", HttpStatus.UNAUTHORIZED.value());
                 return;
             }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            setAuthentication(info.getSubject());
+            if(context.getAuthentication().getName().equals(info.getSubject())){
+                jwtUtil.setAuthentication(info.getSubject(),request);}
+        } else {
+            throw new IllegalArgumentException("로그인을 다시 시도해 주세요.");
         }
-        filterChain.doFilter(request,response);
+        }filterChain.doFilter(request,response);
     }
 
-    public void setAuthentication(String loginId) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        Authentication authentication = jwtUtil.createAuthentication(loginId);
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-    }
 
 
     public void jwtExceptionHandler(HttpServletResponse response, String msg, int statusCode) {
@@ -53,4 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             log.error(e.getMessage());
         }
     }
+
 }
+
+

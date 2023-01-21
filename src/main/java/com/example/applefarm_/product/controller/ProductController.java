@@ -27,7 +27,7 @@ public class ProductController {
     //판매상품 등록
     @PostMapping("")
     public ResponseEntity saveProduct(@RequestBody ProductRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        productService.saveProduct(request,userDetails.getUser());
+        productService.saveProduct(request,userDetails.getUser().getId());
         return ResponseEntity.ok("판매상품 등록 완료");
     }
     

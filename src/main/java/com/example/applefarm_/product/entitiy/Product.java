@@ -51,8 +51,8 @@ public class Product {
         this.productCategory = productCategory;
     }
 
-    public Product(ProductRequest request, User seller) {
-        this.sellerId = seller.getId();
+    public Product(ProductRequest request, Long sellerId) {
+        this.sellerId = sellerId;
         this.productName = request.getProductName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();
@@ -74,5 +74,9 @@ public class Product {
     public void subtractQuantity(int quantity) {
         this.productQuantity -= quantity;
         if(this.productQuantity < 0) throw new CustomException(ExceptionStatus.Quantity_IS_LACKING);
+    }
+
+    public void putQuantityBack(int quantity) {
+        this.productQuantity += quantity;
     }
 }

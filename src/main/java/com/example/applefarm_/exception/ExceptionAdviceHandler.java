@@ -19,12 +19,14 @@ public class ExceptionAdviceHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     protected ResponseEntity handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return new ResponseEntity<>(e.getBindingResult().getFieldErrors(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(e.getBindingResult().getFieldErrors().get(0),
+//                .get(0).getField() + "가  "+ e.getBindingResult().getFieldErrors().get(0).getDefaultMessage(),
+                HttpStatus.BAD_REQUEST);
     }
 
-//
-//    @ExceptionHandler({RuntimeException.class})
-//    protected ResponseEntity<String> handleEtcException(RuntimeException e) {
-//        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//    }
+
+    @ExceptionHandler({RuntimeException.class})
+    protected ResponseEntity<String> handleEtcException(RuntimeException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
