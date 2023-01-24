@@ -35,7 +35,7 @@ public class ProductService {
 
     @Transactional
     public List<ProductResponse> getProducts(int pageChoice, User user) {
-        Page<Product> products= productRepository.findAllBySellerId(user.getId(),pageableSetting(pageChoice));
+        Page<Product> products= productRepository.findAllBySellerId(user.getId(),PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));
         if(products.isEmpty()){
             throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         }
@@ -43,12 +43,7 @@ public class ProductService {
         return productResponseList;
     }
 
-    private Pageable pageableSetting(int pageChoice) {
-        Sort.Direction direction = Sort.Direction.DESC;
-        Sort sort = Sort.by(direction,"id");
-        Pageable pageable = PageRequest.of(pageChoice-1,4,sort);
-        return pageable;
-    }
+
 
     @Transactional
     public void updateProduct(Long id, User user,ProductRequest productRequest) {
