@@ -42,6 +42,7 @@ public class WebSecurityConfig {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/users/signin").permitAll()
                 .antMatchers("/api/users/signup").permitAll()
+                .antMatchers("/api/users/signout").permitAll()
                 .antMatchers("/api/users/**").hasRole("CUSTOMER")
                 .antMatchers("/api/sellers/**").hasRole("SELLER")
                 .anyRequest().authenticated()
