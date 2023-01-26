@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     public List<ProductResponse> getProductsByKeyword(String keyword, int page) {
-        Page<Product> products = productRepository.findAllByProductNameContaining(keyword, pageableSetting(page));
+        Page<Product> products = productRepository.findAllByNameContaining(keyword, pageableSetting(page));
         List<ProductResponse> productResponseList = products.stream().map(ProductResponse::new).collect(Collectors.toList());
         return productResponseList;
     }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 public class ProductResponse {
 
     private Long productId;
-    private String productName;
+    private String name;
     private int productPrice;
     //재고
     private int quantity;
@@ -19,7 +19,7 @@ public class ProductResponse {
 
     public ProductResponse(Product product) {
         this.productId = product.getId();
-        this.productName = product.getProductName();
+        this.name = product.getName();
         this.productPrice = product.getProductPrice();
         this.quantity = product.getProductQuantity();
         this.productImage = product.getProductImage();

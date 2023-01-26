@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findByIdAndSellerId(Long id, Long userId);
 
     Page<Product> findAllBySellerId(Long id, Pageable pageableSetting);
-    Page<Product> findAllByProductNameContaining(String productName, Pageable pageableSetting);
+    Page<Product> findAllByNameContaining(String productName, Pageable pageableSetting);
 
     void deleteAllBySellerId(Long sellerId);
 
