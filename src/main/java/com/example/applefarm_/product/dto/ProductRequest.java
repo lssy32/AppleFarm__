@@ -1,16 +1,19 @@
 package com.example.applefarm_.product.dto;
 
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(force = true,access = AccessLevel.PROTECTED)
 public class ProductRequest {
-    private String name;
-    private int productPrice;
+    private final String name;
+    private final int productPrice;
     //재고
-    private int quantity;
-    private String productImage;
-    private String productDetail;
-    private Long productCategory;
+    private final int quantity;
+    private final String productImage;
+    private final String productDetail;
+    private final Long productCategory;
 
 }
