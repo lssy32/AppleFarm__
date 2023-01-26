@@ -34,8 +34,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<ProductResponse> getProducts(int pageChoice, User user) {
-        Page<Product> products= productRepository.findAllBySellerId(user.getId(),PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));
+    public List<ProductResponse> getProducts(int page, int size, User user) {
+        Page<Product> products= productRepository.findAllBySellerId(user.getId(),PageRequest.of(page-1,size,Sort.Direction.DESC,"id"));
         if(products.isEmpty()){
             throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         }
