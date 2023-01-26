@@ -36,14 +36,14 @@ public class ProductController {
     public List<ProductResponse> getProducts(@RequestParam("page") int page,
                                              @RequestParam("size") int size,
                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return productService.getProducts(page,size, userDetails.getUser());
+        return productService.getProducts(page,size, userDetails.getUser().getId());
     }
 
 
     //판매상품 수정
     @PutMapping("/{id}")
     public ResponseEntity updateProduct(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProductRequest request) {
-        productService.updateProduct(id, userDetails.getUser(), request);
+        productService.updateProduct(id, userDetails.getUser().getId(), request);
         return ResponseEntity.ok("판매상품 수정 완료");
     }
 
@@ -51,7 +51,7 @@ public class ProductController {
     //판매상품 삭제 , 판매 상품 정보를 작성하여 목록에서 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.deleteProduct(id, userDetails.getUser());
+        productService.deleteProduct(id, userDetails.getUser().getId());
         return ResponseEntity.ok("판매 상품 삭제 완료");
     }
 

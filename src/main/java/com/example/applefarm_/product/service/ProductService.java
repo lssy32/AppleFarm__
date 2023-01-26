@@ -34,8 +34,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<ProductResponse> getProducts(int page, int size, User user) {
-        Page<Product> products= productRepository.findAllBySellerId(user.getId(),PageRequest.of(page-1,size,Sort.Direction.DESC,"id"));
+    public List<ProductResponse> getProducts(int page, int size, Long sellerId) {
+        Page<Product> products= productRepository.findAllBySellerId(sellerId,PageRequest.of(page-1,size,Sort.Direction.DESC,"id"));
         if(products.isEmpty()){
             throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         }
@@ -46,16 +46,16 @@ public class ProductService {
 
 
     @Transactional
-    public void updateProduct(Long id, User user,ProductRequest productRequest) {
-        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
+    public void updateProduct(Long id, Long sellerId,ProductRequest productRequest) {
+        Product foundProduct = productRepository.findByIdAndSellerId(id,sellerId).orElseThrow(
                 ()-> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST)
         );
         foundProduct.updateProduct(productRequest);
     }
 
     @Transactional
-    public void deleteProduct(Long id, User user) {
-        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
+    public void deleteProduct(Long id, Long sellerId) {
+        Product foundProduct = productRepository.findByIdAndSellerId(id,sellerId).orElseThrow(
                 ()-> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST)
         );
         productRepository.deleteById(id);
