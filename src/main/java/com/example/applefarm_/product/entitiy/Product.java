@@ -24,7 +24,7 @@ public class Product {
 
 
     @Column(nullable = false, name = "product_name")
-    private String productName;
+    private String name;
 
     @Column(nullable = false, name = "product_price")
     private int productPrice;
@@ -41,9 +41,9 @@ public class Product {
     @Column(nullable = false, name = "product_category")
     private Long productCategory;
 
-    public Product(Long sellerId, String productName, int productPrice, int productQuantity, String productImage, String productDetail, Long productCategory) {
+    public Product(Long sellerId, String name, int productPrice, int productQuantity, String productImage, String productDetail, Long productCategory) {
         this.sellerId = sellerId;
-        this.productName = productName;
+        this.name = name;
         this.productPrice = productPrice;
         this.productQuantity = productQuantity;
         this.productImage = productImage;
@@ -53,7 +53,7 @@ public class Product {
 
     public Product(ProductRequest request, Long sellerId) {
         this.sellerId = sellerId;
-        this.productName = request.getProductName();
+        this.name = request.getName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();
         this.productImage = request.getProductImage();
@@ -63,7 +63,7 @@ public class Product {
     }
 
     public void updateProduct(ProductRequest request) {
-        this.productName = request.getProductName();
+        this.name = request.getName();
         this.productPrice = request.getProductPrice();
         this.productQuantity = request.getQuantity();
         this.productImage = request.getProductImage();
