@@ -51,6 +51,7 @@ public class ProductService {
                 ()-> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST)
         );
         foundProduct.updateProduct(productRequest);
+        productRepository.save(foundProduct); //    코드가 많아질때 대비하여 @Transactional 이 없으면 save 되지 않으므로 . 가시적으로 save()호출 하는게 좋음
     }
 
     @Transactional
