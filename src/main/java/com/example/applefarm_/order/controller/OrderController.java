@@ -25,18 +25,18 @@ public class OrderController {
         return new ResponseEntity<>("주문 완료", HttpStatus.CREATED);
     }
 
-    @GetMapping("sellers/orders")
-    public List<OrderResponseDto> getMyOrders(@RequestParam("page") int page,
-                                              @RequestParam("size") int size,
+
+    @GetMapping("sellers/orders/{pageChoice}")
+    public List<OrderResponseDto> getMyOrders(@PathVariable int pageChoice,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return orderService.getMyOrders(page, size , userDetails.getUser().getId());
+      return orderService.getMyOrders(pageChoice, userDetails.getUser().getId());
     }
 
-    @GetMapping("sellers/orders/waiting")
-    public List<OrderResponseDto> getMyWaitingOrders(@RequestParam("page") int page,
-                                              @RequestParam("size") int size,
+
+    @GetMapping("sellers/orders/waiting/{pageChoice}")
+    public List<OrderResponseDto> getMyWaitingOrders(@PathVariable int pageChoice,
                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return orderService.getMyWaitingOrders(page, size, userDetails.getUser().getId());
+        return orderService.getMyWaitingOrders(pageChoice, userDetails.getUser().getId());
     }
 
 

@@ -44,18 +44,26 @@ public class OrderService {
         productRepository.save(product);
     }
     @Transactional
-    public List<OrderResponseDto> getMyOrders(int page, int size, Long sellerId) {
-        Page<Orders> orders = orderRepository.findAllBySellerId(sellerId, PageRequest.of(page - 1, size, Sort.Direction.DESC,"id"));
+    public List<OrderResponseDto> getMyOrders(int pageChoice, Long sellerId) {
+        Page<Orders> orders = orderRepository.findAllBySellerId(sellerId, pageableSetting(pageChoice));
         if (orders.isEmpty()) throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         List<OrderResponseDto> orderResponseDtoList = orders.stream().map(OrderResponseDto::new).collect(Collectors.toList());
         return orderResponseDtoList;
     }
 
-    public List<OrderResponseDto> getMyWaitingOrders(int page, int size, Long sellerId) {
-        Page<Orders> orders = orderRepository.findAllBySellerIdAndOrderStatus(sellerId, OrderStatus.WAITING, PageRequest.of(page - 1, size, Sort.Direction.DESC,"id"));
+    public List<OrderResponseDto> getMyWaitingOrders(int pageChoice, Long sellerId) {
+        Page<Orders> orders = orderRepository.findAllBySellerIdAndOrderStatus(sellerId, OrderStatus.WAITING, pageableSetting(pageChoice));
         if (orders.isEmpty()) throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         List<OrderResponseDto> orderResponseDtoList = orders.stream().map(OrderResponseDto::new).collect(Collectors.toList());
         return orderResponseDtoList;
+    }
+
+    @Transactional
+    public Pageable pageableSetting(int pageChoice) {
+        Sort.Direction direction = Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        Pageable pageable = PageRequest.of(pageChoice - 1, 10, sort);
+        return pageable;
     }
 
     @Transactional

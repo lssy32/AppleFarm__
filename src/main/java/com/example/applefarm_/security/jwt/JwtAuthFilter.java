@@ -19,7 +19,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
-  //todo 세션 방식 삭제하기 . 쿠키를 헤더에 실어 보내는데 , 쿠키 정책이 1년전에 변경되는 등 , 프론트에서 쿠키를 받을 수 없다? localStorage 에 토큰을 저장하여 원하는 정보를 프론트 페이지에 나타낼수 있음
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = jwtUtil.resolveToken(request);
