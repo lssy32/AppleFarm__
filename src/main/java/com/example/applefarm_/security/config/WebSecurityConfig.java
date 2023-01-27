@@ -39,8 +39,6 @@ public class WebSecurityConfig {
 
 
         http.authorizeHttpRequests()
-                //todo .antMatchers( preflight request?)permitAll()
-                //교차 출처 리소스 공유 (CORS) 사전 요청은 본격적인 교차 출처 HTTP 요청 전에 서버 측에서 그 요청의 메서드와 헤더에 대해 인식하고 있는지를 체크
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/users/signin").permitAll()
                 .antMatchers("/api/users/signup").permitAll()

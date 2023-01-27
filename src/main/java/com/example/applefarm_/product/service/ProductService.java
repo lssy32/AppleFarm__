@@ -34,8 +34,8 @@ public class ProductService {
     }
 
     @Transactional
-    public List<ProductResponse> getProducts(int page, int size, Long sellerId) {
-        Page<Product> products= productRepository.findAllBySellerId(sellerId,PageRequest.of(page-1,size,Sort.Direction.DESC,"id"));
+    public List<ProductResponse> getProducts(int pageChoice, User user) {
+        Page<Product> products= productRepository.findAllBySellerId(user.getId(),PageRequest.of(pageChoice-1,4,Sort.Direction.DESC,"id"));
         if(products.isEmpty()){
             throw new CustomException(ExceptionStatus.PAGINATION_IS_NOT_EXIST);
         }
@@ -46,17 +46,16 @@ public class ProductService {
 
 
     @Transactional
-    public void updateProduct(Long id, Long sellerId,ProductRequest productRequest) {
-        Product foundProduct = productRepository.findByIdAndSellerId(id,sellerId).orElseThrow(
+    public void updateProduct(Long id, User user,ProductRequest productRequest) {
+        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
                 ()-> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST)
         );
         foundProduct.updateProduct(productRequest);
-        productRepository.save(foundProduct); //    코드가 많아질때 대비하여 @Transactional 이 없으면 save 되지 않으므로 . 가시적으로 save()호출 하는게 좋음
     }
 
     @Transactional
-    public void deleteProduct(Long id, Long sellerId) {
-        Product foundProduct = productRepository.findByIdAndSellerId(id,sellerId).orElseThrow(
+    public void deleteProduct(Long id, User user) {
+        Product foundProduct = productRepository.findByIdAndSellerId(id,user.getId()).orElseThrow(
                 ()-> new CustomException(ExceptionStatus.Product_IS_NOT_EXIST)
         );
         productRepository.deleteById(id);

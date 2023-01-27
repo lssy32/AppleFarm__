@@ -1,26 +1,25 @@
 package com.example.applefarm_.product.dto;
 
 import com.example.applefarm_.product.entitiy.Product;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(force = true,access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ProductResponse {
 
-    private final Long productId;
-    private final String name;
-    private final int productPrice;
+    private Long productId;
+    private String productName;
+    private int productPrice;
     //재고
-    private final int quantity;
-    private final String productImage;
-    private final String productDetail;
-    private final Long productCategory;
+    private int quantity;
+    private String productImage;
+    private String productDetail;
+    private Long productCategory;
 
     public ProductResponse(Product product) {
         this.productId = product.getId();
-        this.name = product.getName();
+        this.productName = product.getProductName();
         this.productPrice = product.getProductPrice();
         this.quantity = product.getProductQuantity();
         this.productImage = product.getProductImage();

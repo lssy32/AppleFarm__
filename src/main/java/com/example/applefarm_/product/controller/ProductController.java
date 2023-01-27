@@ -26,34 +26,35 @@ public class ProductController {
 
     //판매상품 등록
     @PostMapping("")
-    public ResponseEntity saveProduct(@RequestBody ProductRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.saveProduct(request, userDetails.getUser().getId());
+    public ResponseEntity saveProduct(@RequestBody ProductRequest request, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        productService.saveProduct(request,userDetails.getUser().getId());
         return ResponseEntity.ok("판매상품 등록 완료");
     }
+    
 
-
-    @GetMapping("")
-    public List<ProductResponse> getProducts(@RequestParam("page") int page,
-                                             @RequestParam("size") int size,
-                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return productService.getProducts(page,size, userDetails.getUser().getId());
+    @GetMapping("/{pageChoice}")
+    public List<ProductResponse> getProducts(@PathVariable int pageChoice, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return productService.getProducts(pageChoice,userDetails.getUser());
     }
 
 
     //판매상품 수정
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody ProductRequest request) {
-        productService.updateProduct(id, userDetails.getUser().getId(), request);
+    public ResponseEntity updateProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails,@RequestBody ProductRequest request){
+        productService.updateProduct(id,userDetails.getUser(),request);
         return ResponseEntity.ok("판매상품 수정 완료");
     }
 
 
+
+
     //판매상품 삭제 , 판매 상품 정보를 작성하여 목록에서 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteProduct(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        productService.deleteProduct(id, userDetails.getUser().getId());
+    public ResponseEntity deleteProduct(@PathVariable Long id,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        productService.deleteProduct(id,userDetails.getUser());
         return ResponseEntity.ok("판매 상품 삭제 완료");
     }
+
 
 
 }
